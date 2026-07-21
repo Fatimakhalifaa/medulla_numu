@@ -150,10 +150,10 @@ branch = [
     { name = "pn_lp",                     type = "both" },
 
     # Fundamental kinematic variables
-    #{ name = "momentum_transfer",         type = "true" },
-    #{ name = "hadronic_invariant_mass",   type = "true" },
-    #{ name = "W",                         type = "both" },
-    #{ name = "Q2",                        type = "both" },
+    { name = "momentum_transfer",         type = "true" },
+    { name = "hadronic_invariant_mass",   type = "true" },
+    { name = "W",                         type = "both" },
+    { name = "Q2",                        type = "both" },
 
     # PID and PDG for leading particles
     { name = "pid",                       type = "both_particle", selector = "leading_muon"     },
@@ -456,10 +456,10 @@ branch = [
     { name = "pn_lp",                     type = "both" },
 
     # Fundamental kinematic variables
-    #{ name = "momentum_transfer",         type = "true" },
-    #{ name = "hadronic_invariant_mass",   type = "true" },
-    #{ name = "W",                         type = "both" },
-    #{ name = "Q2",                        type = "both" },
+    { name = "momentum_transfer",         type = "true" },
+    { name = "hadronic_invariant_mass",   type = "true" },
+    { name = "W",                         type = "both" },
+    { name = "Q2",                        type = "both" },
 
     # PID and PDG for leading particles
     { name = "pid",                       type = "both_particle", selector = "leading_muon"     },
@@ -702,10 +702,10 @@ branch = [
     { name = "pn_lp",                     type = "both" },
 
     # Fundamental kinematic variables
-    #{ name = "momentum_transfer",         type = "true" },
-    #{ name = "hadronic_invariant_mass",   type = "true" },
-    #{ name = "W",                         type = "both" },
-    #{ name = "Q2",                        type = "both" },
+    { name = "momentum_transfer",         type = "true" },
+    { name = "hadronic_invariant_mass",   type = "true" },
+    { name = "W",                         type = "both" },
+    { name = "Q2",                        type = "both" },
 
     # PID and PDG for leading particles
     { name = "pid",                       type = "both_particle", selector = "leading_muon"     },
@@ -947,10 +947,10 @@ branch = [
     { name = "pn_lp",                     type = "both" },
 
     # Fundamental kinematic variables
-    #{ name = "momentum_transfer",        type = "true" },
-    #{ name = "hadronic_invariant_mass",  type = "true" },
-    #{ name = "W",                         type = "both" },
-    #{ name = "Q2",                        type = "both" },
+    { name = "momentum_transfer",        type = "true" },
+    { name = "hadronic_invariant_mass",  type = "true" },
+    { name = "W",                         type = "both" },
+    { name = "Q2",                        type = "both" },
 
     # PID and PDG for leading particles
     { name = "pid",                       type = "both_particle", selector = "leading_muon"     },

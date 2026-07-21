@@ -582,17 +582,6 @@ namespace vars
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dphiT, dphiT);
 
     /**
-     * @brief Variable for dphi_T of the interaction in degrees.
-     * @details Same as dphiT but converted to degrees for easier interpretation.
-     */
-    template<class T>
-    double dphiT_deg(const T & obj)
-    {
-        return dphiT(obj) * 180.0 / M_PI;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::Both, dphiT_deg, dphiT_deg);
-
-    /**
      * @brief Variable for dalpha_T of the interaction.
      * @details dalpha_T is a transverse kinematic imbalance variable defined
      * using the transverse momentum of the total hadronic system and the
@@ -628,17 +617,6 @@ namespace vars
         return std::acos(-1 * utilities::dot_product(total_pt, lepton_pt) / (utilities::magnitude(total_pt) * utilities::magnitude(lepton_pt)));
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, dalphaT, dalphaT);
-
-    /**
-     * @brief Variable for dalpha_T of the interaction in degrees.
-     * @details Same as dalphaT but converted to degrees for easier interpretation.
-     */
-    template<class T>
-    double dalphaT_deg(const T & obj)
-    {
-        return dalphaT(obj) * 180.0 / M_PI;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::Both, dalphaT_deg, dalphaT_deg);
 
     /**
      * @brief Variable for the missing longitudinal momentum of the
@@ -782,55 +760,6 @@ namespace vars
         }
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, opening_angle, opening_angle);
-    
-    /**
-     * @brief Variable for the opening angle between leading muon and proton in degrees.
-     * @details Same as opening_angle but converted to degrees for easier interpretation.
-     * The leading muon and proton are defined as the particles with the
-     * highest kinetic energy. The opening angle is defined as the arccosine of
-     * the dot product of the momentum vectors of the leading muon and proton.
-     * @tparam T the type of interaction (true or reco).
-     * @param obj the interaction to apply the variable on.
-     * @return the opening angle between the leading muon and proton in degrees.
-     */
-    template<class T>
-    double opening_angle_deg(const T & obj)
-    {
-        double angle_rad = opening_angle(obj);
-        if(std::isnan(angle_rad))
-            return kNoMatchValue; // No leading muon or proton found.
-        else
-            return angle_rad * 180.0 / M_PI;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::Both, opening_angle_deg, opening_angle_deg);
-
-    /**
-     * @brief Variable for the cosine of the opening angle between leading muon and proton.
-     * @details The leading muon and proton are defined as the particles with the
-     * highest kinetic energy. This variable returns the cosine of the opening angle,
-     * which is simply the dot product of the direction vectors of the leading muon
-     * and proton (assuming normalized direction vectors).
-     * @tparam T the type of interaction (true or reco).
-     * @param obj the interaction to apply the variable on.
-     * @return the cosine of the opening angle between the leading muon and proton.
-     */
-    template<class T>
-    double opening_angle_cos(const T & obj)
-    {
-        size_t mi = selectors::leading_muon(obj);
-        size_t pi = selectors::leading_proton(obj);
-        if(mi == kNoMatch || pi == kNoMatch)
-            return kNoMatchValue; // No leading muon or proton found.
-        else
-        {
-            auto & m(obj.particles[mi]);
-            auto & p(obj.particles[pi]);
-            return m.start_dir[0] * p.start_dir[0] +
-                   m.start_dir[1] * p.start_dir[1] +
-                   m.start_dir[2] * p.start_dir[2];
-        }
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::Both, opening_angle_cos, opening_angle_cos);
 
     /**
      * @brief Variable for the (primary) photon multiplicity of the
@@ -1031,7 +960,7 @@ namespace vars
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, leading_muon_vertex_gap, leading_muon_vertex_gap);
 
-/**
+    /**
      * @brief Four-momentum transfer squared Q² in GeV².
      * @details Q² = 2·Eν·(Eμ − pμ·cosθbeam) − mμ², where Eν is the visible
      * energy, Eμ and pμ are the leading primary muon energy and momentum
@@ -1093,22 +1022,6 @@ namespace vars
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, W_calosub, W_calosub);
 
-    /**
-    template<class T>
-    double momentum_transfer(const T & obj)
-    {
-        return obj.momentum_transfer;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::True, momentum_transfer, momentum_transfer);
-
-    template<class T>
-    double hadronic_invariant_mass(const T & obj)
-    {
-        return obj.hadronic_invariant_mass;
-    }
-    REGISTER_VAR_SCOPE(RegistrationScope::True, hadronic_invariant_mass, hadronic_invariant_mass);
-    */
-
     template<class T>
     double is_nu(const T & obj)
     {
@@ -1137,5 +1050,19 @@ namespace vars
         return g_issignal ? 1.0 : 0.0;
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, cut_type, cut_type);
+
+    template<class T>
+    double momentum_transfer(const T & obj)
+    {
+        return obj.momentum_transfer;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::True, momentum_transfer, momentum_transfer);
+
+    template<class T>
+    double hadronic_invariant_mass(const T & obj)
+    {
+        return obj.hadronic_invariant_mass;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::True, hadronic_invariant_mass, hadronic_invariant_mass);
 }
 #endif // VARIABLES_H

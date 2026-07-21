@@ -406,8 +406,8 @@ branch = [
     { name = "pn_lp",                     type = "both" },
 
     # Fundamental kinematic variables
-    #{ name = "momentum_transfer",         type = "true" },
-    #{ name = "hadronic_invariant_mass",   type = "true" },
+    { name = "momentum_transfer",         type = "true" },
+    { name = "hadronic_invariant_mass",   type = "true" },
     { name = "W",                         type = "both" },
     { name = "Q2",                        type = "both" },
 
