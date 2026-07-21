@@ -34,10 +34,13 @@ fsthresh = [
     "@greater_than",
 ]
 
+# =============================================================================
+# Samples — CV + data
+# =============================================================================
 
 # ICARUS MC NuMI Neutrino + Cosmics CV
 [[sample]]
-name = "NuMIFull"
+name = "cvext"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.root"
 path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/larcv_mc_20250721_205436_642649-f1a10d3d-9a4a-4e94-b646-9753847a8d2b.flat.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/*.root" # 500k sample 
@@ -57,12 +60,120 @@ disable = false # Optional: default = false
 
 # ICARUS data beam off
 [[sample]]
-name = "dataBeamOff"
+name = "offbeam"
 #path = "/pnfs/icarus/persistent/users/spine/NuMI/offbeam/*.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_offbeam_data_flat_cafs/*.root"
 path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_offbeam_data_flat_cafs/NuMI_offbeam_combined_0.root"
 ismc = false
 disable = false # Optional: default = false
+
+# =============================================================================
+# Samples — detector systematics CV references (NuMI_nue_Null_CV.toml)
+# =============================================================================
+
+[[sample]]
+name = "nominal"
+path = "/pnfs/icarus/persistent/users/spine/NuMI/Nu_det_sys/CV/*.root"
+ismc = true
+disable = false
+
+[[sample]]
+name = "nominal_nue"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/CV_sample/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Null variation (NuMI_nue_Null_CV.toml)
+name = "var00"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Null_sample/*.root"
+ismc = true
+disable = false
+
+# =============================================================================
+# Samples — detector systematics variations
+# =============================================================================
+
+[[sample]] # High gain (NuMI_nue_gain.toml)
+name = "var01p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Gain/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low gain (NuMI_nue_gain.toml)
+name = "var01m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Gain/*.root"
+ismc = true
+disable = false
+
+[[sample]] # High coherent noise (NuMI_nue_coh.toml)
+name = "var02p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Coh/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low coherent noise (NuMI_nue_coh.toml)
+name = "var02m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Coh/*.root"
+ismc = true
+disable = false
+
+[[sample]] # High interaction rate (NuMI_nue_int.toml)
+name = "var03p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Int/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low interaction rate (NuMI_nue_int.toml)
+name = "var03m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Int/*.root"
+ismc = true
+disable = false
+
+[[sample]] # High electron lifetime (NuMI_nue_liftime.toml)
+name = "var04p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Lifetime/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low electron lifetime (NuMI_nue_liftime.toml)
+name = "var04m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Lifetime/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Scintillation variation (NuMI_nue_YZ_scint.toml)
+name = "var05"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Scint_var/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Wire gap (NuMI_nue_Wire_Recomb.toml)
+name = "var06"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/WireGap/*.root"
+ismc = true
+disable = false
+
+[[sample]] # YZ uniformity (NuMI_nue_YZ_scint.toml)
+name = "var07"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/YZ_unif/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Recombination model (NuMI_nue_Wire_Recomb.toml)
+name = "var08"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Recomb_Model/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Cathode bend (NuMI_nue_Cath_Bend.toml)
+name = "var09"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Cath_bend/*.root"
+ismc = true
+disable = false
+
+# =============================================================================
+# Trees
+# =============================================================================
 
 [[tree]]
 name = "all"
@@ -85,6 +196,8 @@ branch = [
     { name = "valid_flashmatch",          type = "both"    },
     { name = "containment",               type = "both"    },
     { name = "containment_cut",           type = "both"    },
+    { name = "track_containment_cut",     type = "both"    },
+    { name = "nonmuon_containment_cut",   type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -107,6 +220,7 @@ branch = [
     { name = "leading_muon_energy_cut",   type = "both", parameters = [ "@muon_threshold" ] },
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
+    { name = "vertex_z_veto_cut",         type = "both", parameters = [-100.0, 100.0] },
 
     # Vertex & flash
     { name = "vertex_x",                  type = "both" },
@@ -364,12 +478,13 @@ branch = [
 name = "selected"
 sim_only = false
 #isdata = false
-add_systematics = false
+add_systematics = true
 add_exposure = true
 mode = "reco"
 cut = [
     { name = "no_cut",                    type = "reco" },
     { name = "fiducial_cut",              type = "reco" },
+    { name = "nonmuon_containment_cut",   type = "reco" },
    #{ name = "valid_flashmatch",          type = "reco" },
     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
    #{ name = "containment_cut",           type = "reco" },
@@ -379,6 +494,7 @@ cut = [
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
     { name = "leading_muon_energy_cut",   type = "reco", parameters = [ "@muon_threshold" ] },
+    { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
 ]
@@ -391,6 +507,8 @@ branch = [
     { name = "valid_flashmatch",          type = "both"    },
     { name = "containment",               type = "both"    },
     { name = "containment_cut",           type = "both"    },
+    { name = "track_containment_cut",     type = "both"    },
+    { name = "nonmuon_containment_cut",   type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -413,6 +531,7 @@ branch = [
     { name = "leading_muon_energy_cut",   type = "both", parameters = [ "@muon_threshold" ] },
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
+    { name = "vertex_z_veto_cut",         type = "both", parameters = [-100.0, 100.0] },
 
     # Vertex & flash
     { name = "vertex_x",                  type = "both" },
@@ -612,7 +731,7 @@ branch = [
 ]
 
 [[tree]]
-name = "true_signal"
+name = "signal"
 sim_only = true
 issignal = true
 #isdata = false
@@ -622,11 +741,13 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
+   #{ name = "nonmuon_containment_cut",   type = "reco" },
    #{ name = "containment_cut",           type = "true" },
-    { name = "has_particle_multiplicity", type = "true",  parameters = [ 1, 2 ]                  },
     { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
+    { name = "has_particle_multiplicity", type = "true",  parameters = [ 1, 2 ]                  },
     { name = "leading_muon_energy_cut",   type = "true",  parameters = [ "@muon_threshold" ]     },
+    { name = "vertex_z_veto_cut",         type = "true", parameters = [-100.0, 100.0] },
 ]
 branch = [
     # cuts
@@ -637,6 +758,8 @@ branch = [
     { name = "valid_flashmatch",          type = "both"    },
     { name = "containment",               type = "both"    },
     { name = "containment_cut",           type = "both"    },
+    { name = "track_containment_cut",     type = "both"    },
+    { name = "nonmuon_containment_cut",   type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -659,6 +782,7 @@ branch = [
     { name = "leading_muon_energy_cut",   type = "both", parameters = [ "@muon_threshold" ] },
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
+    { name = "vertex_z_veto_cut",         type = "both", parameters = [-100.0, 100.0] },
 
     # Vertex & flash
     { name = "vertex_x",                  type = "both" },
@@ -858,19 +982,25 @@ branch = [
 [[tree]]
 name = "nc_sideband"
 sim_only = false
-add_systematics = false
+add_systematics = true
 mode = "reco"
 cut = [
-     { name = "no_cut",                   type = "reco" },
-     { name = "fiducial_cut",             type = "reco" },
-     { name = "flash_cut",                type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
-    #{ name = "containment_cut",          type = "reco" },
-    #{ name = "vertex_distance_cut",      type = "reco", parameters = [ "@vertex_threshold" ] },
-    #{ name = "has_particle_multiplicity",type = "reco", parameters = [1, 1] },
-     { name = "no_electrons",             type = "reco", parameters = [ "@electron_threshold" ] },
-     { name = "no_charged_pions",         type = "reco", parameters = [ "@pion_threshold" ] },
-     { name = "has_particle_multiplicity",type = "reco", parameters = [ 0.0, 2.0, 25.0 ], title = "has_photons"}, 
-     { name = "leading_photon_energy_cut",type = "reco", parameters = [ 40.0 ] }
+     { name = "no_cut",                    type = "reco" },
+     { name = "fiducial_cut",              type = "reco" },
+     { name = "track_containment_cut",     type = "reco" },
+     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
+    #{ name = "containment_cut",           type = "reco" },
+    #{ name = "vertex_distance_cut",       type = "reco", parameters = [ "@vertex_threshold" ] },
+    #{ name = "has_particle_multiplicity", type = "reco", parameters = [1, 1] },
+     { name = "!no_photons",               type = "reco", parameters = [ 40.0 ] },
+     { name = "no_electrons",              type = "reco", parameters = [ "@electron_threshold" ] },
+     { name = "no_charged_pions",          type = "reco", parameters = [ "@pion_threshold" ] },
+     { name = "has_particle_multiplicity", type = "reco", parameters = [ 0.0, 2.0, 25.0 ], title = "has_photons"}, 
+     { name = "leading_photon_energy_cut", type = "reco", parameters = [ 40.0 ] }
+     { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
+     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
+     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
+
 ]
 
 branch = [
@@ -882,6 +1012,8 @@ branch = [
     { name = "valid_flashmatch",          type = "both"    },
     { name = "containment",               type = "both"    },
     { name = "containment_cut",           type = "both"    },
+    { name = "track_containment_cut",     type = "both"    },
+    { name = "nonmuon_containment_cut",   type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -904,6 +1036,7 @@ branch = [
     { name = "leading_muon_energy_cut",   type = "both", parameters = [ "@muon_threshold" ] },
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
+    { name = "vertex_z_veto_cut",         type = "both", parameters = [-100.0, 100.0] },
 
     # Vertex & flash
     { name = "vertex_x",                  type = "both" },

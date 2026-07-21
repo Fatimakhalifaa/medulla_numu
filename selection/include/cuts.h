@@ -262,6 +262,28 @@ namespace cuts
     REGISTER_CUT_SCOPE(RegistrationScope::Both, containment_cut, containment_cut);
 
     /**
+     * @brief Apply a containment cut restricted to track-like particles.
+     * @details Requires that every particle classified as a track
+     * (semantic_type == 1) is contained within the active volume. Shower-like
+     * particles (electrons, photons) are allowed to exit, consistent with
+     * calorimetric energy reconstruction that does not require containment.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if all track-like particles are contained.
+     */
+    template<class T>
+    bool track_containment_cut(const T & obj)
+    {
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::semantic_type(p) == 1 && !pcuts::containment_cut(p))
+                return false;
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, track_containment_cut, track_containment_cut);
+
+    /**
      * @brief Apply a cut to select cathode-crossing interactions.
      * @details This cut is intended to be used in analyses that wish to select
      * (or deselect) interactions that cross the cathode. The cathode-crossing 
@@ -1087,6 +1109,29 @@ namespace cuts
         
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, leading_photon_energy_cut, leading_photon_energy_cut);
+
+    /**
+     * @brief Veto interactions whose vertex lies within a z-range.
+     * @details This cut is intended to reject interactions whose
+     * reconstructed (or true) vertex falls within a specified range along
+     * the z-axis. It is used, e.g., to remove interactions with a vertex
+     * near the center of the detector in z (such as the [-100, 100] cm
+     * region for NuMI).
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @param params the [low, high] bounds of the z-range to veto.
+     * @return false if the vertex z is within [params[0], params[1]], true
+     * otherwise.
+     */
+    template<class T>
+    bool vertex_z_veto_cut(const T & obj, std::vector<double> params={})
+    {
+        if(params.size() == 2 && obj.vertex[2] >= params[0] && obj.vertex[2] <= params[1])
+            return false;
+        else
+            return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, vertex_z_veto_cut, vertex_z_veto_cut);
 
 }
 #endif
