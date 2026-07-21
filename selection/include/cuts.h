@@ -981,5 +981,112 @@ namespace cuts
     }
     REGISTER_CUT_SCOPE(RegistrationScope::True, neutrino_pdg, neutrino_pdg);
 
+
+    template<class T>
+    bool leading_muon_energy_cut(const T & obj, std::vector<double> params={25.0})
+    {
+        if(params.size() != 1)
+            throw std::invalid_argument("leading_muon_energy_cut requires exactly the energy threshold");
+
+        size_t i = selectors::leading_muon(obj);
+        if (i == kNoMatch) return false;
+        const auto & p = obj.particles[i];
+
+        double energy_threshold = params[0];
+
+        if (std::isnan(pvars::energy(p)))
+        {
+            return false; // or true, depending on how you want to handle NaN values
+        }
+        return pvars::energy(p) > energy_threshold;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, leading_muon_energy_cut, leading_muon_energy_cut);
+
+    bool checkSoftmax(double softmax_value, double threshold, double direction)
+    {
+        if (direction == -1.0)
+        {
+            return softmax_value < threshold;
+        }
+        else if (direction == 1.0)
+        {
+            return softmax_value > threshold;
+        }
+        else if (direction == 0.0)
+        {
+            return softmax_value == threshold;
+        }
+        else
+        {
+            throw std::invalid_argument("checkSoftmax requires the direction parameter to be -1.0, 0.0, or 1.0 to specify the direction of the cut.");
+        }
+    }
+
+    template<class T>
+    bool muon_softmax_cut(const T & obj, std::vector<double> params={0.5, 1.0})
+    {
+        if(params.size() != 2)
+            throw std::invalid_argument("muon_softmax_cut requires exactly two parameters: the softmax threshold and the direction of the cut.");
+
+        size_t i = selectors::leading_muon(obj);
+        if (i == kNoMatch) return false;
+        const auto & p = obj.particles[i];
+
+        double softmax_threshold = params[0];
+        double direction = params[1];
+
+        // Added <T> here so the template parameter can be resolved
+        if (std::isnan(pvars::muon_softmax<T>(p)))
+        {
+            return false; 
+        }
+        return (pvars::muon_softmax<T>(p) > softmax_threshold); 
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Reco, muon_softmax_cut, muon_softmax_cut);
+
+    template<class T>
+    bool primary_muon_softmax_cut(const T & obj, std::vector<double> params={0.5, 1.0})
+    {
+        if(params.size() != 2)
+            throw std::invalid_argument("primary_muon_softmax_cut requires exactly two parameters: the softmax threshold and the direction of the cut.");
+
+        size_t i = selectors::leading_muon(obj);
+        if (i == kNoMatch) return false;
+        const auto & p = obj.particles[i];
+    
+        double softmax_threshold = params[0];
+        double direction = params[1];
+        
+        // Added <T> here so the template parameter can be resolved
+        if (std::isnan(pvars::primary_softmax<T>(p)))
+        {
+            return false; 
+        }
+        return checkSoftmax(pvars::primary_softmax<T>(p), softmax_threshold, direction);
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Reco, primary_muon_softmax_cut, primary_muon_softmax_cut);
+
+
+    template<class T>
+    bool leading_photon_energy_cut(const T & obj, std::vector<double> params={25.0})
+    {
+        if(params.size() != 1)
+            throw std::invalid_argument("leading_photon_energy_cut requires exactly the energy threshold");
+
+        size_t i = selectors::leading_photon(obj);
+        if (i == kNoMatch) return false;
+        const auto & p = obj.particles[i];
+
+        double energy_threshold = params[0];
+
+        if (std::isnan(pvars::energy(p)))
+        {
+            return false; // or true, depending on how  NaN values are handled
+        }
+        return pvars::energy(p) > energy_threshold;
+        
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, leading_photon_energy_cut, leading_photon_energy_cut);
+
 }
 #endif

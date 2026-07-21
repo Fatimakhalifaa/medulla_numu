@@ -845,6 +845,82 @@ namespace pvars
         return p.momentum[2];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, pz, pz);
+
+    /**
+     * @brief Variable for angle (cosine) between the particle and beam.
+     * @details This variable is calculated using particle momentum and beam direction.
+     * @tparam T the type of particle (true or reco).
+     * @param p the particle to apply the variable on.
+     * @return the cosine of the angle between the particle and the beam.
+     */
+    template<class T>
+    double beam_costheta(const T & p)
+    {
+        utilities::three_vector mom{px(p), py(p), pz(p)};
+       
+        utilities::three_vector beamdir{0.0, 0.0, 1.0};
+        
+        double mag = utilities::magnitude(mom);
+        
+        // Avoid division by zero if the particle has no momentum
+        if (mag == 0.0) 
+        {
+            return 0.0; 
+        }
+        
+        utilities::three_vector mom_unit{std::get<0>(mom) / mag, std::get<1>(mom) / mag, std::get<2>(mom) / mag};
+        
+        return utilities::dot_product(mom_unit, beamdir);
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, beam_costheta, beam_costheta);
+
+    /**
+     * @brief Variable for the cosine of the angle between the particle direction
+     * and the incoming neutrino direction.
+     * @details The cosine of the angle is computed as the dot product of the
+     * particle unit direction vector with the unit neutrino direction vector.
+     * The neutrino direction is approximated event-by-event as the unit vector
+     * from the NuMI target position (31512.0380, 3364.4912, 73363.2532) cm
+     * (in detector coordinates) to the particle start position, consistent
+     * with the definition used in utilities::transverse_momentum.
+     * @tparam T the type of particle (true or reco).
+     * @param p the particle to apply the variable on.
+     * @return the cosine of the angle between the particle direction and the
+     * incoming neutrino direction.
+     */
+    template<class T>
+    double cos_theta_mu(const T & p)
+    {
+        utilities::three_vector l_dir = std::make_tuple(p.start_dir[0], p.start_dir[1], p.start_dir[2]);
+        utilities::three_vector vtx   = std::make_tuple(p.start_point[0], p.start_point[1], p.start_point[2]);
+
+        utilities::three_vector beam = std::make_tuple(
+            31512.0380 + std::get<0>(vtx),
+             3364.4912 + std::get<1>(vtx),
+            73363.2532 + std::get<2>(vtx));
+        utilities::three_vector nu_dir = utilities::normalize(beam);
+
+        return utilities::dot_product(l_dir, nu_dir);
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, cos_theta_mu, cos_theta_mu);
+
+    /**
+     * @brief Variable for the cosine of the polar angle (w.r.t the z-axis) of the particle.
+     * @details The cosine of the polar angle is simply the z-component of the
+     * momentum direction vector. This variable is useful for identifying particles
+     * which are produced transversely to the beam. Values close to ±1 indicate
+     * particles traveling parallel/antiparallel to the beam axis, while values
+     * near 0 indicate transverse production.
+     * @tparam T the type of particle (true or reco).
+     * @param p the particle to apply the variable on.
+     * @return the cosine of the polar angle of the particle.
+     */
+    template<class T>
+    double polar_angle_cos(const T & p)
+    {
+        return p.start_dir[2];
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, polar_angle_cos, polar_angle_cos);
     
     /**
      * @brief Variable for the transverse momentum of a particle.
@@ -1127,5 +1203,22 @@ namespace pvars
         return p.primary_scores[0];
     }
     REGISTER_VAR_SCOPE(RegistrationScope::RecoParticle, secondary_softmax, secondary_softmax);
+
+    /**
+     * @brief Variable for the PDG code of the particle.
+     * @details This variable returns the PDG code of the particle as determined
+     * by the Monte Carlo truth information. For reconstructed particles, this
+     * returns the PDG code of the truth-matched particle. If no truth match
+     * exists, a placeholder value is returned.
+     * @tparam T the type of particle (true or reco).
+     * @param p the particle to apply the variable on.
+     * @return the PDG code of the particle.
+     */
+     template<class T>
+    double pdg_code(const T & p)
+    {
+        return p.pdg_code;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::BothParticle, pdg_code, pdg_code);
 }
 #endif // PARTICLE_VARIABLES_H

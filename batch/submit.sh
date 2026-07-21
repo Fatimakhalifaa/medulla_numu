@@ -1,25 +1,16 @@
 #!/bin/bash
 
 #######################################################################
-# Usage: submit.sh [--project=PROJECT] [--tag=TAG]
-#
+# Usage: submit.sh [--project=PROJECT] [--branch=BRANCH]
+# 
 # Arguments:
 #   --project=PROJECT   : Specify the project directory
-#   --tag=TAG           : Git ref to checkout on grid nodes (default: develop)
+#   --branch=BRANCH     : Git branch to checkout (default: develop)
 #######################################################################
-
-# Print usage information
-usage() {
-  echo "Usage: submit.sh [--project=PROJECT] [--tag=TAG]"
-  echo ""
-  echo "Arguments:"
-  echo "  --project=PROJECT   : Specify the project directory"
-  echo "  --tag=TAG           : Git ref to checkout on grid nodes (default: develop)"
-}
 
 # Initialize variables
 PROJECT=""
-TAG="develop"
+BRANCH="develop"
 
 # Parse arguments
 while [[ $# -gt 0 ]]; do
@@ -32,17 +23,16 @@ while [[ $# -gt 0 ]]; do
       PROJECT="$2"
       shift 2
       ;;
-    --tag=*)
-      TAG="${1#*=}"
+    --branch=*)
+      BRANCH="${1#*=}"
       shift
       ;;
-    --tag)
-      TAG="$2"
+    --branch)
+      BRANCH="$2"
       shift 2
       ;;
     -h|--help)
       usage
-      exit 0
       ;;
     --) # end of options
       shift
@@ -51,7 +41,6 @@ while [[ $# -gt 0 ]]; do
     *)
       echo "Unknown option: $1" >&2
       usage
-      exit 1
       ;;
   esac
 done
@@ -86,9 +75,10 @@ setup cmake v3_27_4
 ups active
 
 # Build medulla
-git clone https://github.com/justinjmueller/medulla.git
-cd medulla
-git checkout ${TAG}
+#git clone https://github.com/justinjmueller/medulla.git
+git clone https://github.com/Fatimakhalifaa/medulla_numu.git
+cd medulla_numu
+git checkout "$BRANCH"
 mkdir build && cd build
 export CC=$(which gcc)
 export CXX=$(which g++)

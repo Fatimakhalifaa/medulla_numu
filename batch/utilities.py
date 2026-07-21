@@ -323,6 +323,24 @@ def check_project_status(
     # complete. This helps avoid marking jobs as complete if they
     # failed and produced an empty output file.
     output_files = glob(str(project_dir / 'output' / 'output_jobid*.root'))
+    output_jobids = {
+        int(Path(f).stem.split('jobid')[-1])
+        for f in output_files
+    }
+
+    # Find jobs tracked in project.db that do not have a corresponding
+    # output file in output/.
+    command(curs, "SELECT jobid, status FROM jobs")
+    db_rows = curs.fetchall()
+    db_jobids = {row[0] for row in db_rows}
+    status_by_jobid = {row[0]: row[1] for row in db_rows}
+
+    missing_output_jobs = sorted(db_jobids - output_jobids)
+    missing_output_nonpending = [
+        jid for jid in missing_output_jobs
+        if status_by_jobid.get(jid) != 'pending'
+    ]
+
     completed_jobs = [
         int(Path(f).stem.split('jobid')[-1])
         for f in output_files if Path(f).stat().st_size >= 1024
@@ -330,7 +348,6 @@ def check_project_status(
     ins = [('completed', jid) for jid in completed_jobs]
     command(curs, "UPDATE jobs SET status = ? WHERE jobid = ?", ins)
     conn.commit()
-    conn.close()
 
     stub_jobs = [
         int(Path(f).stem.split("jobid")[-1])
@@ -355,20 +372,38 @@ def check_project_status(
                     stub_file.unlink()
             print(f"[INFO] -- Deleted {len(stub_jobs)} stub output file(s).")
 
+    if missing_output_jobs:
+        print(
+            f"[INFO] -- Found {len(missing_output_jobs)} job(s) present in project.db"
+            " but missing output files in output/."
+        )
+        print(f"[INFO] -- Missing output job IDs: {missing_output_jobs}")
+    else:
+        print("[INFO] -- No jobs are missing output files (project.db and output/ are in sync).")
+
+    if missing_output_nonpending:
+        print(
+            f"[WARN] -- {len(missing_output_nonpending)} missing-output job(s) are"
+            " not pending; these may need investigation/resubmission."
+        )
+        print(f"[WARN] -- Non-pending missing output job IDs: {missing_output_nonpending}")
+
+    conn.close()
+
     # Replace the project database copy with the updated version.
     subprocess.run(['mv', './project.db', project_dir / 'project.db'], check=True)
 
     print(f"[INFO] -- Found {len(completed_jobs)} completed jobs.")
-
 def launch_jobsub(
     project_dir : str,
     exp : str = 'sbnd',
     njobs : int = -1,
-    confirm : bool = True,
-    tag : str = 'develop',
+    branch : str = 'develop',
     memory : int = 1800,
     disk : Optional[int] = None,
     lifetime : str = '1h',
+    relaunch_missing : bool = False,
+    confirm : bool = True,
 ):
     """
     Launch jobs using jobsub for the given project directory. If njobs
@@ -382,18 +417,21 @@ def launch_jobsub(
         Experiment name (default: sbnd).
     njobs : int
         Number of jobs to launch. If None, launch all pending jobs.
+    branch : str
+        Branch to use for the medulla repository (defaults to develop).
+    memory : int | None
+        Amount of memory to request for each job in MB. If None, use default.
+    disk : int | None
+        Amount of disk to request for each job in GB. If None, use default.
+    lifetime : str | None
+        Expected lifetime of each job (e.g., '1h', '30m'). If None, use default.
+    relaunch_missing : bool
+        If True, jobs found in project.db but missing output files in output/
+        are reset to 'pending' so they can be relaunched.
     confirm : bool
         If True (default), prompt the user before submitting.  Pass
         False when the caller has already obtained confirmation (e.g.
         campaign launch confirms once for all projects).
-    tag : str
-        Git ref passed to submit.sh as --tag (default: develop).
-    memory : int
-        Amount of memory to request for each job in MB. If None, use default.
-    disk : int
-        Amount of disk to request for each job in GB. If None, use default.
-    lifetime : str
-        Expected lifetime of each job (e.g., '1h', '30m'). If None, use default.
 
     Returns
     -------
@@ -408,10 +446,38 @@ def launch_jobsub(
     conn = sqlite3.connect('./project.db')
     curs = conn.cursor()
 
-    # Get the list of pending jobs.
-    command(curs, "SELECT jobid FROM jobs WHERE status = 'pending'")
-    pending_jobs = [row[0] for row in curs.fetchall()]
+    # Get the list of jobs from the DB and derive pending jobs.
+    command(curs, "SELECT jobid, status FROM jobs")
+    db_rows = curs.fetchall()
+    db_jobids = {row[0] for row in db_rows}
+    status_by_jobid = {row[0]: row[1] for row in db_rows}
+    pending_jobs = [jid for jid, status in db_rows if status == 'pending']
+
+    # Optionally relaunch jobs tracked in project.db but missing output files.
+    if relaunch_missing:
+        output_files = glob(str(project_dir / 'output' / 'output_jobid*.root'))
+        output_jobids = {
+            int(Path(f).stem.split('jobid')[-1])
+            for f in output_files
+        }
+        missing_output_jobs = sorted(db_jobids - output_jobids)
+        relaunch_jobs = [
+            jid for jid in missing_output_jobs
+            if status_by_jobid.get(jid) != 'pending'
+        ]
+        if relaunch_jobs:
+            ins = [('pending', jid) for jid in relaunch_jobs]
+            command(curs, "UPDATE jobs SET status = ? WHERE jobid = ?", ins)
+            conn.commit()
+            pending_jobs = sorted(set(pending_jobs).union(relaunch_jobs))
+            print(
+                f"[INFO] -- Marked {len(relaunch_jobs)} missing-output job(s) as pending for relaunch: {relaunch_jobs}"
+            )
+        else:
+            print("[INFO] -- No additional missing-output jobs needed relaunch.")
+
     conn.close()
+    subprocess.run(['mv', './project.db', project_dir / 'project.db'], check=True)
 
     # Do some checking that the request is sane. Naturally, if there
     # are no pending jobs, there is nothing to launch. Similarly, if
@@ -431,12 +497,17 @@ def launch_jobsub(
     if confirm:
         print(f"{_INFO} -- Found {len(pending_jobs)} pending jobs.")
 
+    disk_size = '10GB' if exp == 'sbnd' else '25GB'
+    if disk is not None:
+        disk_size = f'{disk}GB'
+
     # Form the jobsub command to launch the jobs.
     cmd = [
         'jobsub_submit',
         '-G', exp,
         '-N', str(njobs),
         f'--memory={memory}MB',
+        f'--disk={disk_size}',
         f'--expected-lifetime={lifetime}',
         '--resource-provides=usage_model=DEDICATED,OPPORTUNISTIC,OFFSITE',
         "--append_condor_requirements='(TARGET.HAS_Singularity==true)'",
@@ -444,15 +515,10 @@ def launch_jobsub(
         f'file://{Path(__file__).resolve().parent / "submit.sh"}',
         '--',
         f'--project={project_dir.resolve()}',
-        f'--tag={tag}',
+        f'--branch={branch}',
     ]
 
-    if disk is not None:
-        cmd.append(f'--disk={disk}GB')
-    elif exp == 'sbnd':
-        cmd.append(f'--disk=10GB')
-    else:
-        cmd.append(f'--disk=25GB')
+    #print(f"[INFO] -- Launching {njobs} jobs with command: {' '.join(cmd)}")
 
     # Query the user to confirm that they want to launch the jobs.
     if confirm:
@@ -473,7 +539,7 @@ def launch_jobsub(
         if 'ExpiredSignatureError' in (output := e.stderr.strip()):
             print(f"{_ERROR} -- Job submission failed due to expired token. Please run `htgettoken` to refresh your token and try again.")
         else:
-            print(f"{_ERROR} -- Job submission failed with error: {output}")
+            print(f"[ERROR] -- Job submission failed with error: {output}")
         return False
 
     if confirm:
@@ -493,33 +559,22 @@ def check_git_branch(
     repo_url : str = 'https://github.com/justinjmueller/medulla',
 ):
     """
-    Check if the specified branch or tag exists in the given Git 
-    repository. First checks for branches, then tags if not found.
+    Check out the specified branch in the given Git repository
+    directory.
 
     Parameters
     ----------
     branch : str
-        Branch or tag name to check for existence.
+        Branch to check for existence.
     repo_url : str
         URL to the Git repository.
 
     Returns
     -------
     bool
-        True if the branch or tag exists, False otherwise.
     """
-    # Check if it exists as a branch
     result = subprocess.run(
         ["git", "ls-remote", "--exit-code", "--heads", repo_url, branch],
-        stdout=subprocess.DEVNULL,
-        stderr=subprocess.DEVNULL,
-    )
-    if result.returncode == 0:
-        return True
-    
-    # If not a branch, check if it exists as a tag
-    result = subprocess.run(
-        ["git", "ls-remote", "--exit-code", "--tags", repo_url, branch],
         stdout=subprocess.DEVNULL,
         stderr=subprocess.DEVNULL,
     )
