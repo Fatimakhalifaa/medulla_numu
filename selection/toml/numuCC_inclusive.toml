@@ -11,7 +11,7 @@ flash_low_t = 0.0
 flash_high_t = 9.6
 vertex_threshold = 3.25
 muon_softmax = 0.5
-primary_muon_softmax = 0.8
+primary_muon_softmax = 0.85
 electron_id = 1.0
 greater_than = 1.0
 
@@ -41,8 +41,8 @@ fsthresh = [
 # ICARUS MC NuMI Neutrino + Cosmics CV
 [[sample]]
 name = "cvext"
-#path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.root"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/larcv_mc_20250721_205436_642649-f1a10d3d-9a4a-4e94-b646-9753847a8d2b.flat.root"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/larcv_mc_20250721_205436_642649-f1a10d3d-9a4a-4e94-b646-9753847a8d2b.flat.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/*.root" # 500k sample 
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_2/*.flat.root" # extended sample
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/NuMI_CV_flat_cafs_2_01.root"
@@ -52,18 +52,18 @@ disable = false # Optional: default = false
 # ICARUS data beam on (10%)
 [[sample]]
 name = "data"
-#path = "/pnfs/icarus/persistent/users/spine/NuMI/onbeam/NuMI_data_flat_cafs_2/*.root"
+path = "/pnfs/icarus/persistent/users/spine/NuMI/onbeam/NuMI_data_flat_cafs_2/*.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_data_flat_cafs_2/*.root"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_data_flat_cafs_2/NuMI_data_flat_cafs_2_00.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_data_flat_cafs_2/NuMI_data_flat_cafs_2_00.root"
 ismc = false
 disable = false # Optional: default = false
 
 # ICARUS data beam off
 [[sample]]
 name = "offbeam"
-#path = "/pnfs/icarus/persistent/users/spine/NuMI/offbeam/*.root"
+path = "/pnfs/icarus/persistent/users/spine/NuMI/offbeam/*.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_offbeam_data_flat_cafs/*.root"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_offbeam_data_flat_cafs/NuMI_offbeam_combined_0.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_offbeam_data_flat_cafs/NuMI_offbeam_combined_0.root"
 ismc = false
 disable = false # Optional: default = false
 
@@ -81,6 +81,8 @@ add_systematics = false
 add_exposure = true
 mode = "reco"
 cut = [
+    { name = "fiducial_cut",              type = "reco"   },
+    { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
 ]
@@ -95,6 +97,9 @@ branch = [
     { name = "containment_cut",           type = "both"    },
     { name = "track_containment_cut",     type = "both"    },
     { name = "nonmuon_containment_cut",   type = "both"    },
+    { name = "exiting_muon_cut",          type = "both"    },
+    { name = "muon_containment_cut",      type = "both"    },
+    { name = "hadron_containment_cut",    type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -189,7 +194,7 @@ branch = [
     { name = "mip_softmax",               type = "reco_particle", selector = "leading_muon" },
     # Leading MUON particle-level
     { name = "energy",                    type = "both_particle", selector = "leading_muon" },    
-    { name = "p",                  type = "both_particle", selector = "leading_muon" },
+    { name = "p",                         type = "both_particle", selector = "leading_muon" },
     { name = "mass",                      type = "both_particle", selector = "leading_muon" },
     { name = "ke",                        type = "both_particle", selector = "leading_muon" },
     { name = "calo_ke",                   type = "both_particle", selector = "leading_muon" },
@@ -381,10 +386,11 @@ mode = "reco"
 cut = [
     { name = "no_cut",                    type = "reco" },
     { name = "fiducial_cut",              type = "reco" },
-    { name = "nonmuon_containment_cut",   type = "reco" },
+    { name = "hadron_containment_cut",    type = "reco" },
+   #{ name = "nonmuon_containment_cut",   type = "reco" },
+   #{ name = "containment_cut",           type = "reco" },
    #{ name = "valid_flashmatch",          type = "reco" },
     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
-   #{ name = "containment_cut",           type = "reco" },
     { name = "has_particle_multiplicity", type = "reco", parameters = [1, 2] },
     { name = "no_photons",                type = "reco", parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "reco", parameters = [ "@electron_threshold" ] },
@@ -406,6 +412,9 @@ branch = [
     { name = "containment_cut",           type = "both"    },
     { name = "track_containment_cut",     type = "both"    },
     { name = "nonmuon_containment_cut",   type = "both"    },
+    { name = "exiting_muon_cut",          type = "both"    },
+    { name = "muon_containment_cut",      type = "both"    },
+    { name = "hadron_containment_cut",    type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -657,6 +666,9 @@ branch = [
     { name = "containment_cut",           type = "both"    },
     { name = "track_containment_cut",     type = "both"    },
     { name = "nonmuon_containment_cut",   type = "both"    },
+    { name = "exiting_muon_cut",          type = "both"    },
+    { name = "muon_containment_cut",      type = "both"    },
+    { name = "hadron_containment_cut",    type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -880,20 +892,21 @@ branch = [
 name = "nc_sideband"
 sim_only = false
 add_systematics = true
+add_exposure = true
 mode = "reco"
 cut = [
      { name = "no_cut",                    type = "reco" },
      { name = "fiducial_cut",              type = "reco" },
      { name = "track_containment_cut",     type = "reco" },
-     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
+    #{ name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
     #{ name = "containment_cut",           type = "reco" },
-    #{ name = "vertex_distance_cut",       type = "reco", parameters = [ "@vertex_threshold" ] },
+     { name = "vertex_distance_cut",       type = "reco", parameters = [ "@vertex_threshold" ] },
     #{ name = "has_particle_multiplicity", type = "reco", parameters = [1, 1] },
      { name = "!no_photons",               type = "reco", parameters = [ 40.0 ] },
      { name = "no_electrons",              type = "reco", parameters = [ "@electron_threshold" ] },
      { name = "no_charged_pions",          type = "reco", parameters = [ "@pion_threshold" ] },
      { name = "has_particle_multiplicity", type = "reco", parameters = [ 0.0, 2.0, 25.0 ], title = "has_photons"}, 
-     { name = "leading_photon_energy_cut", type = "reco", parameters = [ 40.0 ] }
+     { name = "leading_photon_energy_cut", type = "reco", parameters = [ 40.0 ] },
      { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
      { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
      { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
@@ -911,6 +924,9 @@ branch = [
     { name = "containment_cut",           type = "both"    },
     { name = "track_containment_cut",     type = "both"    },
     { name = "nonmuon_containment_cut",   type = "both"    },
+    { name = "exiting_muon_cut",          type = "both"    },
+    { name = "muon_containment_cut",      type = "both"    },
+    { name = "hadron_containment_cut",    type = "both"    },
 
     # cuts as branch variables
     { name = "flash_cut",                 type = "both", parameters = [ "@flash_low_t", "@flash_high_t" ] },
@@ -1005,7 +1021,7 @@ branch = [
     { name = "mip_softmax",               type = "reco_particle", selector = "leading_muon" },
     # Leading MUON particle-level
     { name = "energy",                    type = "both_particle", selector = "leading_muon" },    
-    { name = "p",                  type = "both_particle", selector = "leading_muon" },
+    { name = "p",                         type = "both_particle", selector = "leading_muon" },
     { name = "mass",                      type = "both_particle", selector = "leading_muon" },
     { name = "ke",                        type = "both_particle", selector = "leading_muon" },
     { name = "calo_ke",                   type = "both_particle", selector = "leading_muon" },
