@@ -1133,5 +1133,69 @@ namespace cuts
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, vertex_z_veto_cut, vertex_z_veto_cut);
 
+    /**
+     * @brief Apply a containment cut restricted to non-muon track-like particles.
+     * @details Requires that every particle classified as a track (semantic_type == 1)
+     * that is NOT a muon is contained within the active volume. This allows
+     * both muons and shower-like particles (electrons, photons) to exit.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if all non-muon track-like particles are contained.
+     */
+    template<class T>
+    bool hadron_containment_cut(const T & obj)
+    {
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::semantic_type(p) == 1 && pvars::pid(p) != pvars::kMuon && !pcuts::containment_cut(p))
+                return false;
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, hadron_containment_cut, hadron_containment_cut);
+
+    /**
+     * @brief Apply a containment cut restricted only to muons.
+     * @details Requires that every particle classified as a muon (pid == kMuon)
+     * is contained within the active volume. All other particles (hadrons, showers)
+     * are ignored and freely allowed to exit.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if all muons are contained.
+     */
+    template<class T>
+    bool muon_containment_cut(const T & obj)
+    {
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == pvars::kMuon && !pcuts::containment_cut(p))
+                return false;
+        }
+        return true;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, muon_containment_cut, muon_containment_cut);
+
+    /**
+     * @brief Select interactions where a muon exits the detector.
+     * @details Checks all particles in the interaction and returns true if at least
+     * one particle classified as a muon (pid == kMuon) is not contained within
+     * the active volume. Intended for selecting exiting muon topologies for MCS
+     * momentum reconstruction.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @return true if at least one muon exits the active volume.
+     */
+    template<class T>
+    bool exiting_muon_cut(const T & obj)
+    {
+        for(const auto & p : obj.particles)
+        {
+            if(pvars::pid(p) == pvars::kMuon && !pcuts::containment_cut(p))
+                return true;
+        }
+        return false;
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, exiting_muon_cut, exiting_muon_cut);
+
 }
 #endif

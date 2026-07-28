@@ -556,7 +556,7 @@ def launch_jobsub(
 
 def check_git_branch(
     branch : str,
-    repo_url : str = 'https://github.com/justinjmueller/medulla',
+    repo_url : str = 'https://github.com/Fatimakhalifaa/medulla_numu',
 ):
     """
     Check out the specified branch in the given Git repository

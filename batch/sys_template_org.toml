@@ -568,3 +568,236 @@ name = "GENIEReWeight_SBNNuSyst_LQCDZExpFit_multisim_ZExpAVariationResponse"
 type = "multisigma"
 index = 191
 nsigma = [0, 1]
+
+
+# =============================================================================
+# Samples — detector systematics CV references (NuMI_nue_Null_CV.toml)
+# =============================================================================
+
+[[sample]]
+name = "nominal"
+path = "/pnfs/icarus/persistent/users/spine/NuMI/Nu_det_sys/CV/*.root"
+ismc = true
+disable = false
+
+[[sample]]
+name = "nominal_nue"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/CV_sample/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Null variation (NuMI_nue_Null_CV.toml)
+name = "var00"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Null_sample/*.root"
+ismc = true
+disable = false
+
+# =============================================================================
+# Samples — detector systematics variations
+# =============================================================================
+
+[[sample]] # High gain (NuMI_nue_gain.toml)
+name = "var01p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Gain/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low gain (NuMI_nue_gain.toml)
+name = "var01m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Gain/*.root"
+ismc = true
+disable = false
+
+[[sample]] # High coherent noise (NuMI_nue_coh.toml)
+name = "var02p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Coh/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low coherent noise (NuMI_nue_coh.toml)
+name = "var02m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Coh/*.root"
+ismc = true
+disable = false
+
+[[sample]] # High interaction rate (NuMI_nue_int.toml)
+name = "var03p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Int/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low interaction rate (NuMI_nue_int.toml)
+name = "var03m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Int/*.root"
+ismc = true
+disable = false
+
+[[sample]] # High electron lifetime (NuMI_nue_liftime.toml)
+name = "var04p"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/High_Lifetime/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Low electron lifetime (NuMI_nue_liftime.toml)
+name = "var04m"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Low_Lifetime/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Scintillation variation (NuMI_nue_YZ_scint.toml)
+name = "var05"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Scint_var/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Wire gap (NuMI_nue_Wire_Recomb.toml)
+name = "var06"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/WireGap/*.root"
+ismc = true
+disable = false
+
+[[sample]] # YZ uniformity (NuMI_nue_YZ_scint.toml)
+name = "var07"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/YZ_unif/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Recombination model (NuMI_nue_Wire_Recomb.toml)
+name = "var08"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Recomb_Model/*.root"
+ismc = true
+disable = false
+
+[[sample]] # Cathode bend (NuMI_nue_Cath_Bend.toml)
+name = "var09"
+path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_Nue_det_sys_flat_cafs/Cath_bend/*.root"
+ismc = true
+disable = false
+
+
+[variations]
+keys = [ 'nominal_nue','var00', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p','var04m','var04p','var05','var06','var07','var08','var09']
+origin = 'events/'
+tree = 'selected'
+result_destination = 'detsys_results/'
+variable = 'reco_leading_muon_ke'
+bins = [15, 0, 3000]
+nuniverses = 1000
+variable_length = false
+
+[[tree]]
+origin = 'events/cvext/selected'
+destination = 'events/cvext/'
+name = 'selected'
+action = 'add_weights'
+#table_types = ['variation']
+table_types = ['multisim', 'multisigma', 'variation']
+
+[[tree]]
+origin = 'events/cvext/signal'
+destination = 'events/cvext/'
+name = 'signal'
+action = 'add_weights'
+#table_types = ['multisim', 'multisigma']
+table_types = ['multisim', 'multisigma', 'variation']
+
+[[tree]]
+origin = 'events/data/selected'
+destination = 'events/data/'
+name = 'selected'
+action = 'copy'
+[[tree]]
+origin = 'events/offbeam/selected'
+destination = 'events/offbeam/'
+name = 'selected'
+action = 'copy'
+
+[[sys]]
+name = 'var00'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var00', 'var00', 'var00', 'nominal_nue', 'var00', 'var00', 'var00']
+
+[[sys]]
+name = 'var01'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var01m', 'var01m', 'var01m', 'nominal_nue', 'var01p', 'var01p', 'var01p']
+
+[[sys]]
+name = 'var02'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var02m', 'var02m', 'var02m', 'nominal_nue', 'var02p', 'var02p', 'var02p']
+
+[[sys]]
+name = 'var03'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [3, 2, 1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var03m', 'var03m', 'var03m', 'nominal_nue', 'var03p', 'var03p', 'var03p']
+
+[[sys]]
+name = 'var04'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var04m', 'var04m', 'var04m', 'nominal_nue', 'var04p', 'var04p', 'var04p']
+
+[[sys]]
+name = 'var05'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var05', 'var05', 'var05', 'nominal_nue', 'var05', 'var05', 'var05']
+
+[[sys]]
+name = 'var06'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var06', 'var06', 'var06', 'nominal_nue', 'var06', 'var06', 'var06']
+
+[[sys]]
+name = 'var07'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var07', 'var07', 'var07', 'nominal_nue', 'var07', 'var07', 'var07']
+
+[[sys]]
+name = 'var08'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var08', 'var08', 'var08', 'nominal_nue', 'var08', 'var08', 'var08']
+
+[[sys]]
+name = 'var09'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'nominal_nue'
+points = ['var09', 'var09', 'var09', 'nominal_nue', 'var09', 'var09', 'var09']

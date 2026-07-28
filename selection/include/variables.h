@@ -1174,5 +1174,42 @@ namespace vars
         return g_issignal ? 1.0 : 0.0;
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, cut_type, cut_type);
+
+    /*Topology*/
+    template<class T>
+    double reco_interaction_type(const T & obj)
+    {
+        int nEle(0);
+        int nMu(0);
+        int nPi(0);
+        int nProton(0);
+        for (size_t i = 0; i < obj.particles.size(); ++i)
+        {
+            if(pvars::pid(obj.particles[i]) == pvars::kMuon && pvars::primary_classification(obj.particles[i]))
+                nMu++;
+            else if(pvars::pid(obj.particles[i]) == pvars::kElectron && pvars::primary_classification(obj.particles[i]))
+                nEle++;
+            else if(pvars::pid(obj.particles[i]) == pvars::kPion && pvars::primary_classification(obj.particles[i]))
+                nPi++;
+            else if(pvars::pid(obj.particles[i]) == pvars::kProton && pvars::primary_classification(obj.particles[i]))
+                nProton++;
+        }
+
+        if(nMu > 0 && nEle == 0 && nPi == 0 && nProton == 1)
+            return 1; // CC QE-like
+        else if(nMu > 0 && nEle == 0 && nPi == 0 && nProton == 2)
+            return 2; // CC MEC-like
+        else if(nMu > 0 && nEle == 0 && nPi == 0 && nProton > 2)
+            return 3; // CC DIS-like
+        else if(nMu > 0 && nEle == 0 && nPi == 1)
+            return 4; // RES-like
+        else if(nMu > 0 && nEle == 0 && nPi > 1)
+            return 5; // DIS-like, SIS-like
+        else if(nMu > 0 && nEle == 0)
+            return 6; // Other nuE
+        else
+            return 0; // Other interaction type
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Reco, reco_interaction_type, reco_interaction_type);
 }
 #endif // VARIABLES_H
