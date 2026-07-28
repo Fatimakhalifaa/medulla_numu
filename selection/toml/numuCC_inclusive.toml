@@ -386,9 +386,9 @@ mode = "reco"
 cut = [
     { name = "no_cut",                    type = "reco" },
     { name = "fiducial_cut",              type = "reco" },
-    { name = "hadron_containment_cut",    type = "reco" },
+   #{ name = "hadron_containment_cut",    type = "reco" },
    #{ name = "nonmuon_containment_cut",   type = "reco" },
-   #{ name = "containment_cut",           type = "reco" },
+    { name = "containment_cut",           type = "reco" },
    #{ name = "valid_flashmatch",          type = "reco" },
     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "has_particle_multiplicity", type = "reco", parameters = [1, 2] },
@@ -647,8 +647,8 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-   #{ name = "nonmuon_containment_cut",   type = "reco" },
-   #{ name = "containment_cut",           type = "true" },
+   #{ name = "nonmuon_containment_cut",   type = "true" },
+    { name = "containment_cut",           type = "true" },
     { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
     { name = "has_particle_multiplicity", type = "true",  parameters = [ 1, 2 ]                  },
@@ -1227,8 +1227,9 @@ branch = [
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
+    { name = "containment_cut" },
     { name = "iscc"            },
-    { name = "neutrino_pdg",              parameters = [ 14.0] },
+    { name = "neutrino_pdg",              parameters = [ 14.0, -14.0] },
     { name = "has_particle_multiplicity", parameters = [ 1, 2 ] },
     { name = "no_photons",                parameters = [ "@photon_threshold" ] },
     { name = "no_electrons",              parameters = [ "@electron_threshold" ] },
@@ -1241,7 +1242,7 @@ cuts = [
 cuts = [
     { name = "neutrino"        },
     { name = "iscc"            },
-    { name = "neutrino_pdg",              parameters = [ 14.0] },
+    { name = "neutrino_pdg",              parameters = [ 14.0, -14.0] },
     { name = "has_particle_multiplicity", parameters = [ 1, 2 ] },
     { name = "no_photons",                parameters = [ "@photon_threshold" ] },
     { name = "no_electrons",              parameters = [ "@electron_threshold" ] },
@@ -1252,10 +1253,11 @@ cuts = [
 cuts = [
     { name = "neutrino"        },
     { name = "fiducial_cut"    },
+    { name = "containment_cut" },
     { name = "iscc"            },
-    { name = "neutrino_pdg",          parameters = [ 12.0 ] },
+    { name = "neutrino_pdg",           parameters = [ 12.0, -12.0 ] },
     #{ name = "no_photons",            parameters = [ "@photon_threshold" ] },
-    #{ name = "containment_cut" },
+    
 ]
 
 [[category]] # 3 : Out of fiducial volume and uncontained neutrino events

@@ -17,14 +17,14 @@ htgettoken -a htvaultprod.fnal.gov  -i icarus
 # Running in the grid
 
 # Create Project
-rm -fr /pnfs/icarus/scratch/users/faabdalr/New_med/numu_t/
-python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numuCC_inclusive.toml -p /pnfs/icarus/scratch/users/faabdalr/bNew_med/numu_opt -b 10 --create-project
+rm -fr /pnfs/icarus/scratch/users/faabdalr/New_med/test/
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numuCC_inclusive.toml -p /pnfs/icarus/scratch/users/faabdalr/New_med/numu_opt -b 10 --create-project
 
 # Submit a test
-python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/New_med/numu_t -e icarus --test-job --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 2
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/New_med/test -e icarus --test-job --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 2
 
 # Submit all jobs
-python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/bNew_med/numu_opt -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 10
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/New_med/numu_opt -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 10
 
 # Verify the test output 
 ls -lh /pnfs/icarus/scratch/users/faabdalr/nueCC_inclusive_all_ntest/output/
