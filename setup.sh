@@ -9,7 +9,9 @@ source /cvmfs/icarus.opensciencegrid.org/products/icarus/setup_icarus.sh
 # Set up the required dependencies:
 setup sbnana v10_01_02_01 -q e26:prof
 
+# Build
 setup cmake v3_27_4
+cmake .. && make -j4
 
 # ICARUS
 htgettoken -a htvaultprod.fnal.gov  -i icarus
