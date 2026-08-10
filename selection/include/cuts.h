@@ -1197,5 +1197,43 @@ namespace cuts
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, exiting_muon_cut, exiting_muon_cut);
 
+    /**
+     * @brief Cut to select interactions with contained muons only.
+     * @details This function applies a cut to select interactions where all
+     * muons above the energy threshold are contained within the detector
+     * volume. A muon is considered contained if its containment flag is set
+     * and it meets the energy and primary particle requirements. This cut
+     * is useful for analyses that require accurate momentum reconstruction
+     * of muons, which is only possible when the entire track is contained
+     * within the detector.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj the interaction to select on.
+     * @param params the parameters for the cut. In this case, this sets the
+     * kinetic energy threshold for a muon to be considered in the selection.
+     * Defaults to 143.425 MeV, which corresponds to a muon of length 50 cm
+     * (assuming the muon stops).
+     * @return true if all muons above threshold in the interaction are contained.
+     */
+    template<class T>
+    bool contained_muons_only(const T & obj, std::vector<double> params={200,})
+    {
+        for(const auto & p : obj.particles)
+        {
+            // Check if particle is a muon above threshold and primary
+            if(pvars::pid(p) == 2 &&
+               pvars::primary_classification(p) &&
+               pvars::ke(p) >= params[0])
+            {
+                // If we find a muon above threshold, check if it's contained
+                if(p.is_contained != 1)
+                {
+                    return false; // Found an uncontained muon, fail the cut
+                }
+            }
+        }
+        return true; // All muons above threshold are contained (or no muons found)
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Both, contained_muons_only, contained_muons_only);
+
 }
 #endif
