@@ -88,10 +88,8 @@ add_systematics = false
 add_exposure = true
 mode = "reco"
 cut = [
-    { name = "fiducial_cut",              type = "reco" },
-    { name = "hadron_containment_cut",    type = "reco" },
-    { name = "exiting_muon_cut",          type = "reco" },
-   #{ name = "exiting_muon_cut",          type = "reco", parameters = [ "@muon_threshold" ]},
+    #{ name = "fiducial_cut",              type = "reco" },
+    #{ name = "hadron_containment_cut",    type = "reco" },
     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
@@ -109,7 +107,6 @@ branch = [
     { name = "track_containment_cut",     type = "both"    },
     { name = "nonmuon_containment_cut",   type = "both"    },
     { name = "exiting_muon_cut",          type = "both"    },
-   #{ name = "contained_muons_only",      type = "both"    },
     { name = "muon_containment_cut",      type = "both"    },
     { name = "hadron_containment_cut",    type = "both"    },
 
@@ -425,8 +422,6 @@ cut = [
     { name = "no_cut",                    type = "reco" },
     { name = "fiducial_cut",              type = "reco" },
     { name = "hadron_containment_cut",    type = "reco" },
-    { name = "exiting_muon_cut",          type = "reco" },
-   #{ name = "exiting_muon_cut",          type = "reco", parameters = [ "@muon_threshold" ]},
     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "has_particle_multiplicity", type = "reco", parameters = [1, 2] },
     { name = "no_photons",                type = "reco", parameters = [ "@photon_threshold"   ] },
@@ -450,7 +445,6 @@ branch = [
     { name = "track_containment_cut",     type = "both"    },
     { name = "nonmuon_containment_cut",   type = "both"    },
     { name = "exiting_muon_cut",          type = "both"    },
-   #{ name = "contained_muons_only",      type = "both"    },
     { name = "muon_containment_cut",      type = "both"    },
     { name = "hadron_containment_cut",    type = "both"    },
 
@@ -699,8 +693,6 @@ mode = "true"
 cut = [
     { name = "neutrino",                  type = "true" },
     { name = "fiducial_cut",              type = "true" },
-    { name = "hadron_containment_cut",    type = "true" },
-    { name = "exiting_muon_cut",          type = "true" },
     { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
     { name = "has_particle_multiplicity", type = "true",  parameters = [ 1, 2 ]                  },
@@ -719,7 +711,6 @@ branch = [
     { name = "track_containment_cut",     type = "both"    },
     { name = "nonmuon_containment_cut",   type = "both"    },
     { name = "exiting_muon_cut",          type = "both"    },
-   #{ name = "contained_muons_only",      type = "both"    },
     { name = "muon_containment_cut",      type = "both"    },
     { name = "hadron_containment_cut",    type = "both"    },
 
