@@ -2,7 +2,7 @@
 photon_threshold = 25.0
 electron_threshold = 25.0
 #muon_threshold = 143.425
-muon_threshold = 200.0
+muon_threshold = 300.0
 pion_threshold = 25.0
 proton_threshold = 50.0
 trackLength_threshold = 190.0
@@ -150,7 +150,8 @@ branch = [
     { name = "baseline",                  type = "mctruth" },
     { name = "neutrino_energy",           type = "mctruth" },  
     { name = "visible_energy",            type = "both"    },
-    { name = "hadronic_visible_energy",   type = "both"},
+    { name = "hadronic_visible_energy",   type = "both"    },
+    { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
 
     # Kinematic imbalance & angles
@@ -391,6 +392,7 @@ cut = [
     { name = "fiducial_cut",              type = "reco" },
     { name = "hadron_containment_cut",    type = "reco" },
     { name = "muon_containment_cut",      type = "reco" },
+    { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
     { name = "flash_cut",                 type = "reco", parameters = [ "@flash_low_t", "@flash_high_t" ] },
     { name = "has_particle_multiplicity", type = "reco", parameters = [1, 2] },
     { name = "no_photons",                type = "reco", parameters = [ "@photon_threshold"   ] },
@@ -398,7 +400,6 @@ cut = [
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
     { name = "leading_muon_energy_cut",   type = "reco", parameters = [ "@muon_threshold" ] },
-    { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
     #{ name = "valid_flashmatch",         type = "reco" },
@@ -464,7 +465,8 @@ branch = [
     { name = "baseline",                  type = "mctruth" },
     { name = "neutrino_energy",           type = "mctruth" },  
     { name = "visible_energy",            type = "both"    },
-    { name = "hadronic_visible_energy",   type = "both"},
+    { name = "hadronic_visible_energy",   type = "both"    },
+    { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
 
     # Kinematic imbalance & angles
@@ -651,11 +653,12 @@ cut = [
     { name = "fiducial_cut",              type = "true" },
     { name = "hadron_containment_cut",    type = "true" },
     { name = "muon_containment_cut",      type = "true" },
+    { name = "vertex_z_veto_cut",         type = "true", parameters = [-100.0, 100.0] },
     { name = "no_photons",                type = "true",  parameters = [ "@photon_threshold"   ] },
     { name = "no_electrons",              type = "true",  parameters = [ "@electron_threshold" ] },
     { name = "has_particle_multiplicity", type = "true",  parameters = [ 1, 2 ]                  },
     { name = "leading_muon_energy_cut",   type = "true",  parameters = [ "@muon_threshold" ]     },
-    { name = "vertex_z_veto_cut",         type = "true", parameters = [-100.0, 100.0] },
+    
 ]
 branch = [
     # cuts
@@ -718,7 +721,8 @@ branch = [
     { name = "baseline",                  type = "mctruth" },
     { name = "neutrino_energy",           type = "mctruth" },  
     { name = "visible_energy",            type = "both"    },
-    { name = "hadronic_visible_energy",   type = "both"},
+    { name = "hadronic_visible_energy",   type = "both"    },
+    { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
 
     # Kinematic imbalance & angles
@@ -975,7 +979,8 @@ branch = [
     { name = "baseline",                  type = "mctruth" },
     { name = "neutrino_energy",           type = "mctruth" },  
     { name = "visible_energy",            type = "both"    },
-    { name = "hadronic_visible_energy",   type = "both"},
+    { name = "hadronic_visible_energy",   type = "both"    },
+    { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
 
     # Kinematic imbalance & angles

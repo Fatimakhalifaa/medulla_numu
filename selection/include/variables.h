@@ -190,6 +190,33 @@ namespace vars
     REGISTER_VAR_SCOPE(RegistrationScope::Both, hadronic_visible_energy, hadronic_visible_energy);
 
     /**
+     * @brief Variable for total visible energy from the leptons in interaction.
+     * @details This function calculates the total visible energy of the leptons
+     * in an interaction by summing the energy of all leptons that are identified
+     * as counting towards the final state of the interaction.
+     * @tparam T the type of interaction (true or reco).
+     * @param obj interaction to apply the variable on.
+     * @return the total leptonic visible energy of the interaction in GeV.
+     */
+    template<class T>
+    double leptonic_visible_energy(const T & obj)
+    {
+        double energy(0);
+        for(const auto & p : obj.particles)
+        {
+            if(pcuts::final_state_signal(p))
+            {
+                if(pvars::pid(p) == pvars::kElectron || pvars::pid(p) == pvars::kMuon) 
+                {
+                    energy += pvars::energy(p);
+                }
+            }
+        }
+        return energy / 1000.0;
+    }
+    REGISTER_VAR_SCOPE(RegistrationScope::Both, leptonic_visible_energy, leptonic_visible_energy);
+
+    /**
      * @brief Variable for energy reconstruction assuming CCQE kinematics using
      * the lepton.
      * @details This function calculates the neutrino energy assuming CCQE

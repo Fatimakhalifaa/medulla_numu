@@ -156,7 +156,8 @@ branch = [
     { name = "baseline",                  type = "mctruth" },
     { name = "neutrino_energy",           type = "mctruth" },  
     { name = "visible_energy",            type = "both"    },
-    { name = "hadronic_visible_energy",   type = "both"},
+    { name = "hadronic_visible_energy",   type = "both"    },
+    { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
 
     # Kinematic imbalance & angles
@@ -430,6 +431,7 @@ cut = [
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
     { name = "leading_muon_energy_cut",   type = "reco", parameters = [ "@muon_threshold" ] },
     { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
+    { name = "crtpmt_veto",               type = "event", parameters = [ "@flash_low_t", "@flash_high_t" ], decrements_exposure = false},
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
 ]
@@ -494,7 +496,8 @@ branch = [
     { name = "baseline",                  type = "mctruth" },
     { name = "neutrino_energy",           type = "mctruth" },  
     { name = "visible_energy",            type = "both"    },
-    { name = "hadronic_visible_energy",   type = "both"},
+    { name = "hadronic_visible_energy",   type = "both"    },
+    { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
 
     # Kinematic imbalance & angles
@@ -760,7 +763,8 @@ branch = [
     { name = "baseline",                  type = "mctruth" },
     { name = "neutrino_energy",           type = "mctruth" },  
     { name = "visible_energy",            type = "both"    },
-    { name = "hadronic_visible_energy",   type = "both"},
+    { name = "hadronic_visible_energy",   type = "both"    },
+    { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
 
     # Kinematic imbalance & angles
