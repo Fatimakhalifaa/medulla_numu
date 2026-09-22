@@ -181,11 +181,11 @@ namespace vars
         {
             if(pcuts::final_state_signal(p))
             {
-                if(pvars::pid(p) == pvars::kProton) energy += pvars::energy(p) - pvars::mass(p) - PROTON_BINDING_ENERGY;
+                if(pvars::pid(p) == pvars::kProton) energy += pvars::energy(p) - pvars::mass(p) + PROTON_BINDING_ENERGY;
                 if(pvars::pid(p) == pvars::kPion)   energy += pvars::energy(p);
             }
         }
-        return energy;
+        return energy/1000.0;
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, hadronic_visible_energy, hadronic_visible_energy);
 
@@ -212,7 +212,7 @@ namespace vars
                 }
             }
         }
-        return energy / 1000.0;
+        return energy/1000.0;
     }
     REGISTER_VAR_SCOPE(RegistrationScope::Both, leptonic_visible_energy, leptonic_visible_energy);
 
