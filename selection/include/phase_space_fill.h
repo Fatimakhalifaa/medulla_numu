@@ -24,13 +24,14 @@
 #include <vector>
 #include <algorithm>
 #include <stdexcept>
-
+ 
 #include "framework.h"
 #include "selectors.h"
 #include "variables.h"
 #include "particle_variables.h"
+#include "cosmic_rejection.h"
 #include "particle_cuts.h"
-
+ 
 namespace utilities
 {
     /**
@@ -299,5 +300,23 @@ namespace cuts
         return utilities::vertex_uniform(float(obj.vertex[0]), float(obj.vertex[1]), float(obj.vertex[2])) < f;
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Reco, phase_space_fill_table4_cut, phase_space_fill_table4_cut);
+
+    /**
+     * @brief Flash-score cosmic rejection for exiting leading muons only;
+     * contained leading muons pass.
+     * @details Same test as cuts::flash_score_cut (score > threshold), but
+     * applied only to the exiting pool, matching the notebook.
+     * @param params params[0]: minimum flash score (default 288).
+     */
+    template<class T>
+    bool exiting_flash_score_cut(const T & obj, std::vector<double> params={288.0,})
+    {
+        size_t i = selectors::leading_muon(obj);
+        if(i == kNoMatch) return false;
+        if(pcuts::containment_cut(obj.particles[i])) return true;
+        double s = vars::flash_score(obj);
+        return std::isfinite(s) && s != PLACEHOLDERVALUE && s > params[0];
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Reco, exiting_flash_score_cut, exiting_flash_score_cut);
 }
 #endif // PHASE_SPACE_FILL_H
