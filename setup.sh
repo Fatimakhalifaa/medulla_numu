@@ -83,6 +83,6 @@ cmake .. && make -j4
 # Running the Selection
 ./selection/medulla /exp/icarus/data/users/fatima/medulla_numu/selection/toml/nu
 
-### Contained Use job id 30040554.0@jobsub04.fnal.gov to retrieve output
-### Exiting Use job id 93804438.0@jobsub02.fnal.gov to retrieve output
-### Both Use job id 30040513.0@jobsub04.fnal.gov to retrieve output
+### Contained Use job id 93804669.0@jobsub02.fnal.gov to retrieve output
+### Exiting Use job id 30344875.0@jobsub05.fnal.gov to retrieve output
+### Use job id 30040821.0@jobsub04.fnal.gov to retrieve output
