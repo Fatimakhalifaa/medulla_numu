@@ -525,3 +525,12 @@ cuts = [
 [[category]] # 6 : Other ?
 cuts = [
 ]
+
+# =============================================================================
+# Sample — nominal (numu_nominal.toml)
+# =============================================================================
+#[[sample]]
+#name = "nominal"
+#path = "/pnfs/icarus/persistent/users/kyjung/G4Reweight/NuMI/icaruspro_production_v09_89_01_02p02_2025A_NuMI_nuCos_CV_detsys_nu_cos_CV_scrub/*.flat.root"
+#ismc = true
+#disable = false

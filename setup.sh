@@ -33,11 +33,11 @@ python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection
 python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_both_ps_test -e icarus --test-job --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 2
 
 # Submit all jobs
-python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_econtained2 -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 10
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_both_ps -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 10
 
-python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_eexiting2 -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_contained_ps -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
 
-python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_eboth2 -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_exiting_ps -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 
 
 # Verify the test output 
 ls -lh /pnfs/icarus/scratch/users/faabdalr/nueCC_inclusive_all_ntest/output/
@@ -83,6 +83,6 @@ cmake .. && make -j4
 # Running the Selection
 ./selection/medulla /exp/icarus/data/users/fatima/medulla_numu/selection/toml/nu
 
-### Contained Use job id 93804669.0@jobsub02.fnal.gov to retrieve output
-### Exiting Use job id 30344875.0@jobsub05.fnal.gov to retrieve output
-### Use job id 30040821.0@jobsub04.fnal.gov to retrieve output
+### Contained Use job id 30630250.0@jobsub05.fnal.gov to retrieve output
+### Exiting Use job id 94168349.0@jobsub02.fnal.gov to retrieve output
+### Both

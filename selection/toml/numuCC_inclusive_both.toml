@@ -103,6 +103,9 @@ cut = [
     { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
+    #{ name = "exiting_muon_length_cut",              type = "reco", parameters = [100] },
+    #{ name = "visible_energy_window_by_containment", type = "reco", parameters = [0.65, 1.85, -1e+09, 1e+09] },
+    #{ name = "phase_space_fill_table4_cut",          type = "reco", parameters = [ ...line printed by 7.17... ] },
 ]
 branch = [
     # cuts

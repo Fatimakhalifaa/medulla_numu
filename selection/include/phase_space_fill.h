@@ -24,14 +24,13 @@
 #include <vector>
 #include <algorithm>
 #include <stdexcept>
- 
+
 #include "framework.h"
 #include "selectors.h"
 #include "variables.h"
 #include "particle_variables.h"
-#include "cosmic_rejection.h"
 #include "particle_cuts.h"
- 
+
 namespace utilities
 {
     /**
@@ -161,6 +160,23 @@ namespace cuts
     REGISTER_CUT_SCOPE(RegistrationScope::Both, visible_energy_window_cut, visible_energy_window_cut);
 
     /**
+     * @brief Flash-score window [lo, hi] (inclusive). Use 1e9 / -1e9 for an open side.
+     * @details Same quantity as the reco_flash_score branch (vars::flash_score).
+     * Interactions without a flash score fail.
+     * @param params [lo, hi].
+     */
+    template<class T>
+    bool flash_score_window_cut(const T & obj, std::vector<double> params={-1e9, 1e9})
+    {
+        if(params.size() != 2)
+            throw std::invalid_argument("flash_score_window_cut requires [lo, hi].");
+        double s = vars::flash_score(obj);
+        if(!std::isfinite(s) || s == PLACEHOLDERVALUE) return false;
+        return s >= params[0] && s <= params[1];
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Reco, flash_score_window_cut, flash_score_window_cut);
+
+    /**
      * @brief Visible-energy window that depends on the leading-muon topology.
      * @param params [contained_lo, contained_hi, exiting_lo, exiting_hi] in GeV.
      * @return false if there is no leading muon.
@@ -181,20 +197,45 @@ namespace cuts
     REGISTER_CUT_SCOPE(RegistrationScope::Both, visible_energy_window_by_containment, visible_energy_window_by_containment);
 
     /**
-     * @brief Track-length window for exiting leading muons; contained muons pass.
-     * @param params [min_cm, max_cm] (default [100, 1e9]).
+     * @brief Exiting leading muons must have at least params[0] cm of track
+     * inside the detector; contained muons pass.
+     * @details pvars::length is the reconstructed track length, i.e. the part
+     * of the track inside the active volume. An optional params[1] sets a
+     * maximum length (no maximum if omitted).
+     * @param params [min_cm] or [min_cm, max_cm] (default [100]).
      */
     template<class T>
-    bool exiting_muon_length_cut(const T & obj, std::vector<double> params={100.0, 1e9})
+    bool exiting_muon_length_cut(const T & obj, std::vector<double> params={100.0,})
     {
+        if(params.empty())
+            throw std::invalid_argument("exiting_muon_length_cut requires [min_cm] or [min_cm, max_cm].");
         size_t i = selectors::leading_muon(obj);
         if(i == kNoMatch) return false;
         const auto & m = obj.particles[i];
         if(pcuts::containment_cut(m)) return true;
         double l = pvars::length(m);
-        return std::isfinite(l) && l >= params[0] && l < params[1];
+        if(!std::isfinite(l) || l < params[0]) return false;
+        return params.size() < 2 || l < params[1];
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Both, exiting_muon_length_cut, exiting_muon_length_cut);
+
+    /**
+     * @brief Flash-score cosmic rejection for exiting leading muons only;
+     * contained leading muons pass.
+     * @details Same test as cuts::flash_score_cut (score > threshold), but
+     * applied only to the exiting pool, matching the notebook.
+     * @param params params[0]: minimum flash score (default 288).
+     */
+    template<class T>
+    bool exiting_flash_score_cut(const T & obj, std::vector<double> params={288.0,})
+    {
+        size_t i = selectors::leading_muon(obj);
+        if(i == kNoMatch) return false;
+        if(pcuts::containment_cut(obj.particles[i])) return true;
+        double s = vars::flash_score(obj);
+        return std::isfinite(s) && s != PLACEHOLDERVALUE && s > params[0];
+    }
+    REGISTER_CUT_SCOPE(RegistrationScope::Reco, exiting_flash_score_cut, exiting_flash_score_cut);
 
     /**
      * @brief Hard-cut version of the exiting fill.
@@ -212,7 +253,7 @@ namespace cuts
         if(i == kNoMatch) return false;
         if(pcuts::containment_cut(obj.particles[i])) return true;
         double x = vars::leptonic_visible_energy(obj);
-        double c = vars::leading_lepton_cos_theta(obj);
+        double c = pvars::cos_theta_mu(obj.particles[i]);   // leading muon, = notebook lepton_cos_theta for numu
         double h = vars::hadronic_visible_energy(obj);
         if(!std::isfinite(x) || !std::isfinite(c) || !std::isfinite(h) || c == PLACEHOLDERVALUE) return false;
         return x >= params[0] && x < params[1] && c >= params[2] && c <= params[3] && h >= params[4] && h < params[5];
@@ -244,7 +285,7 @@ namespace cuts
         bool contained = pcuts::containment_cut(obj.particles[i]);
 
         double x = vars::leptonic_visible_energy(obj);
-        double c = vars::leading_lepton_cos_theta(obj);
+        double c = pvars::cos_theta_mu(obj.particles[i]);   // leading muon, = notebook lepton_cos_theta for numu
         double h = vars::hadronic_visible_energy(obj);
         if(!std::isfinite(x) || !std::isfinite(c) || !std::isfinite(h) || c == PLACEHOLDERVALUE) return false;
 
@@ -284,7 +325,7 @@ namespace cuts
         bool contained = pcuts::containment_cut(obj.particles[i]);
 
         double x = vars::leptonic_visible_energy(obj);
-        double c = vars::leading_lepton_cos_theta(obj);
+        double c = pvars::cos_theta_mu(obj.particles[i]);   // leading muon, = notebook lepton_cos_theta for numu
         double h = vars::hadronic_visible_energy(obj);
         double r = vars::hadronic_visible_energy_rest(obj);
         if(!std::isfinite(x) || !std::isfinite(c) || !std::isfinite(h) || !std::isfinite(r) || c == PLACEHOLDERVALUE) return false;
@@ -300,23 +341,5 @@ namespace cuts
         return utilities::vertex_uniform(float(obj.vertex[0]), float(obj.vertex[1]), float(obj.vertex[2])) < f;
     }
     REGISTER_CUT_SCOPE(RegistrationScope::Reco, phase_space_fill_table4_cut, phase_space_fill_table4_cut);
-
-    /**
-     * @brief Flash-score cosmic rejection for exiting leading muons only;
-     * contained leading muons pass.
-     * @details Same test as cuts::flash_score_cut (score > threshold), but
-     * applied only to the exiting pool, matching the notebook.
-     * @param params params[0]: minimum flash score (default 288).
-     */
-    template<class T>
-    bool exiting_flash_score_cut(const T & obj, std::vector<double> params={288.0,})
-    {
-        size_t i = selectors::leading_muon(obj);
-        if(i == kNoMatch) return false;
-        if(pcuts::containment_cut(obj.particles[i])) return true;
-        double s = vars::flash_score(obj);
-        return std::isfinite(s) && s != PLACEHOLDERVALUE && s > params[0];
-    }
-    REGISTER_CUT_SCOPE(RegistrationScope::Reco, exiting_flash_score_cut, exiting_flash_score_cut);
 }
 #endif // PHASE_SPACE_FILL_H
