@@ -1,0 +1,61 @@
+[input]
+path = '/exp/icarus/data/users/fatima/Medulla_output/NumuCC_inclusive_all.root'
+weights = '/pnfs/icarus/persistent/users/spine/NuMI/Nu_det_sys/CV/*.root'
+
+use_additional_hash = true
+
+[output]
+path = '/exp/icarus/data/users/fatima/Medulla_output/Systematics/numu/numu_both_G4_sys.root'
+histogram_destination = 'variations/'
+
+[[sysvar]]
+#name = 'reco_leading_muon_p'
+#bins = [15, 0, 3000]
+name = 'reco_visible_energy'
+bins = [30, 0, 5]
+
+[[tree]]
+origin = 'events/cv/selected'
+destination = 'events/full/'
+name = 'selected'
+action = 'add_weights'
+#table_types = ['variation']
+table_types = ['multisigma','multisim','variation']
+
+[[tree]]
+origin = 'events/cv/signal'
+destination = 'events/full/'
+name = 'signal'
+action = 'add_weights'
+#table_types = ['multisim', 'multisigma']
+table_types = ['multisigma','multisim','variation']
+
+[[sys]]
+name = "reinteractions_kminus_Geant4"
+type = "multisim"
+index = 115
+
+[[sys]]
+name = "reinteractions_kplus_Geant4"
+type = "multisim"
+index = 116
+
+[[sys]]
+name = "reinteractions_neutron_Geant4"
+type = "multisim"
+index = 117
+
+[[sys]]
+name = "reinteractions_piminus_Geant4"
+type = "multisim"
+index = 118
+
+[[sys]]
+name = "reinteractions_piplus_Geant4"
+type = "multisim"
+index = 119
+
+[[sys]]
+name = "reinteractions_proton_Geant4"
+type = "multisim"
+index = 120

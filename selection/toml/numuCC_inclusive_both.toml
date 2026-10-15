@@ -98,10 +98,14 @@ cut = [
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
     { name = "leading_muon_energy_cut",   type = "reco", parameters = [ "@muon_threshold" ] },
-    { name = "flash_score_cut",           type = "reco", parameters = [ "@flash_score_threshold"]},
+    #{ name = "flash_score_cut",           type = "reco", parameters = [ "@flash_score_threshold"]},
+    { name = "exiting_flash_score_cut",   type = "reco", parameters = [288.0] },
     { name = "vertex_z_veto_cut",         type = "reco", parameters = [-100.0, 100.0] },
     { name = "trigger_emulation_cut",     type = "event", decrements_exposure = false },
     { name = "data_quality_cut",          type = "event", decrements_exposure = true  },
+    #{ name = "exiting_muon_length_cut",              type = "reco", parameters = [100] },
+    #{ name = "visible_energy_window_by_containment", type = "reco", parameters = [0.65, 1.85, -1e+09, 1e+09] },
+    #{ name = "phase_space_fill_table4_cut",          type = "reco", parameters = [ ...line printed by 7.17... ] },
 ]
 branch = [
     # cuts
@@ -140,7 +144,8 @@ branch = [
     { name = "muon_softmax_cut",          type = "reco", parameters = [ "@muon_softmax", "@greater_than" ] },
     { name = "primary_muon_softmax_cut",  type = "reco", parameters = [ "@primary_muon_softmax", "@greater_than" ] },
     { name = "vertex_z_veto_cut",         type = "both", parameters = [-100.0, 100.0] },
-    #{ name = "crtpmt_veto",               type = "event", parameters = [ "@flash_low_t", "@flash_high_t" ], decrements_exposure = false},
+    #{ name = "crtpmt_veto",              type = "event", parameters = [ "@flash_low_t", "@flash_high_t" ], decrements_exposure = false},
+    { name = "exiting_flash_score_cut",   type = "reco", parameters = [288.0] },
 
     # Vertex & flash
     { name = "vertex_x",                  type = "both" },
@@ -617,11 +622,12 @@ branch = [
     # Cosmic-rejection candidate variables 
     { name = "leading_muon_zenith_cut",   type = "both", parameters = [ "@zenith_threshold" ] },
     { name = "flash_score_cut",           type = "reco", parameters = [ "@flash_score_threshold" ] },
+    { name = "exiting_flash_score_cut",   type = "reco", parameters = [288.0] },
     { name = "flash_pe_consistency_cut",  type = "reco", parameters = [ "@flash_pe_ratio_lo", "@flash_pe_ratio_hi" ] },
     { name = "muon_vertex_gap_cut",       type = "both", parameters = [ "@muon_vertex_gap_thresh" ] },
     { name = "muon_reco_quality_cut",     type = "reco", parameters = [ "@mcs_csda_diff_thresh" ] },
     { name = "michel_attached_muon",      type = "reco", parameters = [ "@michel_min_depositions", "@michel_muon_ke_thresh", "@michel_dist_thresh" ] },
-]
+] 
 
 
 [[tree]]

@@ -9,7 +9,7 @@
  */
 #define PLACEHOLDERVALUE std::numeric_limits<double>::quiet_NaN()
 #define PROTON_BINDING_ENERGY 30.9 // MeV
-#define BEAM_IS_NUMI false
+#define BEAM_IS_NUMI true
 
 #include <iostream>
 #include <string>
@@ -33,7 +33,7 @@
 #include "biselectors.h"
 #include "analysis.h"
 #include "cosmic_rejection.h"
-#include "phase_space_fill.h"
+#include "phase_space_fill.h" 
 
 std::shared_ptr<VarFn<RParticleType>> pvars::primfn = std::make_shared<VarFn<RParticleType>>(pvars::default_primary_classification<RParticleType>);
 std::shared_ptr<VarFn<RParticleType>> pvars::pidfn  = std::make_shared<VarFn<RParticleType>>(pvars::default_pid<RParticleType>);
