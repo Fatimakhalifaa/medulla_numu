@@ -23,17 +23,17 @@ htgettoken -a htvaultprod.fnal.gov  -i icarus
 Use job id 85989373.0@jobsub01.fnal.gov to retrieve output
 # Create Project
 rm -fr /pnfs/icarus/scratch/users/faabdalr/nNew_med/numu_contained/
-python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numuCC_inclusive_both.toml -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_both_ps -b 10 --create-project
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numuCC_inclusive_both.toml -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_test -b 10 --create-project
 
 python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numuCC_inclusive_contained.toml -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_contained_ps -b 10 --create-project
 
 python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numuCC_inclusive_exiting.toml -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_exiting_ps -b 10 --create-project
 
 # Submit a test
-python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_both_ps_test -e icarus --test-job --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 2
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_both_all_test -e icarus --test-job --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 2
 
 # Submit all jobs
-python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_both_ps -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 10
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_both_all -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 --lifetime 10
 
 python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/numu/numu_contained_ps -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
 
@@ -81,8 +81,45 @@ cmake .. && make -j4
 
 
 # Running the Selection
-./selection/medulla /exp/icarus/data/users/fatima/medulla_numu/selection/toml/nu
+./selection/medulla /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numuCC_inclusive_both.toml
 
 ### Contained Use job id 30630250.0@jobsub05.fnal.gov to retrieve output
 ### Exiting Use job id 94168349.0@jobsub02.fnal.gov to retrieve output
 ### Both
+
+
+# Systematics
+./build/systematics/run_systematics systematics/toml/NuMI_numu_CV_ext.toml
+./build/systematics/run_systematics systematics/toml/NuMI_numu_Geant4.toml
+
+rm -fr /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_null
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_null_cv.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_null -b 10 --create-project
+
+# Submit a test
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_null -e icarus --test-job --branch feature/numu_analysis --memory 12000 --disk 30 
+
+# Submit all jobs
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_null -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30 
+
+
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_gain.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_gain -b 10 --create-project
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_gain -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
+
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_coh.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_coh -b 10 --create-project
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_coh -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
+
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_cath_bend.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_cath -b 10 --create-project
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_cath -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
+
+
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_int.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_int -b 10 --create-project
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_int -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
+
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_lifetime.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_liftime -b 10 --create-project
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_liftime -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
+
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_wire_recomb.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_wire -b 10 --create-project
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_wire -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
+
+python3 batch/medulla.py -t /exp/icarus/data/users/fatima/medulla_numu/selection/toml/numu_YZ_scint.toml -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_scint -b 10 --create-project
+python3 batch/medulla.py -p /pnfs/icarus/scratch/users/faabdalr/cNew_med/numu_scint -e icarus --launch-jobs --branch feature/numu_analysis --memory 12000 --disk 30
