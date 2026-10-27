@@ -1,5 +1,5 @@
 [input]
-path = '/exp/icarus/data/users/fatima/Medulla_output/NumuCC_inclusive_all.root'
+path = '/exp/icarus/data/users/fatima/Medulla_output/Systematics/numu/numu_all.root'
 weights = '/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.flat.root'
 
 
@@ -16,7 +16,7 @@ name = 'reco_visible_energy'
 bins = [30, 0, 5]
 
 [variations]
-keys = [ 'cv','var00', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p','var04m','var04p','var05','var06','var07','var08','var09']
+keys = [ 'cv', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p','var04m','var04p','var05','var06','var07','var08','var09']
 origin = 'events/'
 tree = 'selected'
 result_destination = 'detsys_results/'
@@ -68,14 +68,14 @@ action = 'copy'
 #name = 'nc_sideband'
 #action = 'copy'
 
-[[sys]]
-name = 'var00'
-type = 'variation'
-index = -1
-nsigma = [-3, -2, -1, 0, 1 ,2, 3]
-scale = [-3, -2, -1, 1, 1, 2, 3]
-ordinate = 'cv'
-points = ['var00', 'var00', 'var00', 'cv', 'var00', 'var00', 'var00']
+#[[sys]]
+#name = 'var00'
+#type = 'variation'
+#index = -1
+#nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+#scale = [-3, -2, -1, 1, 1, 2, 3]
+#ordinate = 'cv'
+#points = ['var00', 'var00', 'var00', 'cv', 'var00', 'var00', 'var00']
 
 [[sys]]
 name = 'var01'

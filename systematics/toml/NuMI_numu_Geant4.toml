@@ -1,11 +1,11 @@
 [input]
-path = '/exp/icarus/data/users/fatima/Medulla_output/NumuCC_inclusive_all.root'
+path = '/exp/icarus/data/users/fatima/Medulla_output/Systematics/numu/G4/numu_G4.root'
 weights = '/pnfs/icarus/persistent/users/kyjung/G4Reweight/NuMI/icaruspro_production_v09_89_01_02p02_2025A_NuMI_nuCos_CV_detsys_nu_cos_CV_scrub/*.flat.root'
 
 use_additional_hash = true
 
 [output]
-path = '/exp/icarus/data/users/fatima/Medulla_output/Systematics/numu/numu_both_G4_sys.root'
+path = '/exp/icarus/data/users/fatima/Medulla_output/Systematics/numu/G4/numu_G4_sys.root'
 histogram_destination = 'variations/'
 
 [[sysvar]]
@@ -17,17 +17,19 @@ bins = [30, 0, 5]
 
 [[tree]]
 origin = 'events/nominal/selected'
-destination = 'events/full/'
+destination = 'events/G4/'
 name = 'selected'
 action = 'add_weights'
-table_types = ['multisigma','multisim','variation']
+#table_types = ['multisigma','multisim','variation']
+table_types = ['multisim']
 
 [[tree]]
 origin = 'events/nominal/signal'
-destination = 'events/full/'
+destination = 'events/G4/'
 name = 'signal'
 action = 'add_weights'
-table_types = ['multisigma','multisim','variation']
+#table_types = ['multisigma','multisim','variation']
+table_types = ['multisim']
 
 [[sys]]
 name = "reinteractions_kminus_Geant4"

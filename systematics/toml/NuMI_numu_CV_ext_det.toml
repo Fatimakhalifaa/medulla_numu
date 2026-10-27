@@ -1,0 +1,160 @@
+[input]
+path = '/exp/icarus/data/users/fatima/Medulla_output/Systematics/numu/pre_sys/numu_xsecsys_pre_detsys.root'
+weights = '/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.flat.root'
+
+use_additional_hash = true
+
+[output]
+path = '/exp/icarus/data/users/fatima/Medulla_output/Systemtics/numu/numu_det_sys.root'
+histogram_destination = 'variations/'
+
+[[sysvar]]
+#name = 'reco_leading_muon_p'
+#bins = [15, 0, 3000]
+name = 'reco_visible_energy'
+bins = [30, 0, 5]
+
+[variations]
+keys = [ 'cv', 'var01p','var01m', 'var02m','var02p', 'var03m', 'var03p','var04m','var04p','var05','var06','var07','var08','var09']
+origin = 'events/'
+tree = 'selected'
+result_destination = 'detsys_results/'
+#variable = 'reco_leading_muon_p' #bins = [15, 0, 3000]
+variable = 'reco_visible_energy'
+bins = [30, 0, 5]
+nuniverses = 1000
+variable_length = false
+
+[[tree]]
+origin = 'events/cvext/selected'
+destination = 'events/detsys/'
+name = 'selected'
+action = 'add_weights'
+#table_types = ['multisim', 'multisigma', 'variation']
+table_types = ['variation']
+
+[[tree]]
+origin = 'events/cvext/signal'
+destination = 'events/detsys/'
+name = 'signal'
+action = 'add_weights'
+#table_types = ['multisim', 'multisigma', 'variation']
+table_types = ['variation']
+
+#[[tree]]
+#origin = 'events/data/selected'
+#destination = 'events/data/'
+#name = 'selected'
+#action = 'copy'
+
+#[[tree]]
+#origin = 'events/offbeam/selected'
+#destination = 'events/offbeam/'
+#name = 'selected'
+#action = 'copy'
+
+#[[tree]]
+#origin = 'events/cvext/nc_sideband'
+#destination = 'events/cvext/'
+#name = 'nc_sideband'
+#action = 'copy'
+#[[tree]]
+#origin = 'events/data/nc_sideband'
+#destination = 'events/data/'
+#name = 'nc_sideband'
+#action = 'copy'
+#[[tree]]
+#origin = 'events/offbeam/nc_sideband'
+#destination = 'events/offbeam/'
+#name = 'nc_sideband'
+#action = 'copy'
+
+#[[sys]]
+#name = 'var00'
+#type = 'variation'
+#index = -1
+#nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+#scale = [-3, -2, -1, 1, 1, 2, 3]
+#ordinate = 'cv'
+#points = ['var00', 'var00', 'var00', 'cv', 'var00', 'var00', 'var00']
+
+[[sys]]
+name = 'var01'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var01m', 'var01m', 'var01m', 'cv', 'var01p', 'var01p', 'var01p']
+
+[[sys]]
+name = 'var02'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var02m', 'var02m', 'var02m', 'cv', 'var02p', 'var02p', 'var02p']
+
+[[sys]]
+name = 'var03'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [3, 2, 1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var03m', 'var03m', 'var03m', 'cv', 'var03p', 'var03p', 'var03p']
+
+[[sys]]
+name = 'var04'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var04m', 'var04m', 'var04m', 'cv', 'var04p', 'var04p', 'var04p']
+
+[[sys]]
+name = 'var05'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var05', 'var05', 'var05', 'cv', 'var05', 'var05', 'var05']
+
+[[sys]]
+name = 'var06'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var06', 'var06', 'var06', 'cv', 'var06', 'var06', 'var06']
+
+[[sys]]
+name = 'var07'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var07', 'var07', 'var07', 'cv', 'var07', 'var07', 'var07']
+
+[[sys]]
+name = 'var08'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var08', 'var08', 'var08', 'cv', 'var08', 'var08', 'var08']
+
+[[sys]]
+name = 'var09'
+type = 'variation'
+index = -1
+nsigma = [-3, -2, -1, 0, 1 ,2, 3]
+scale = [-3, -2, -1, 1, 1, 2, 3]
+ordinate = 'cv'
+points = ['var09', 'var09', 'var09', 'cv', 'var09', 'var09', 'var09']

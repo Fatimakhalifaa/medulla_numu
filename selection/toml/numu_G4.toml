@@ -332,6 +332,9 @@ branch = [
     { name = "muon_vertex_gap_cut",       type = "both", parameters = [ "@muon_vertex_gap_thresh" ] },
     { name = "muon_reco_quality_cut",     type = "reco", parameters = [ "@mcs_csda_diff_thresh" ] },
     { name = "michel_attached_muon",      type = "reco", parameters = [ "@michel_min_depositions", "@michel_muon_ke_thresh", "@michel_dist_thresh" ] },
+
+    { name = "muon_energy_synth",   type = "true" },
+    { name = "muon_energy_synth_r", type = "true" },
 ]
 
 [[tree]]
@@ -596,6 +599,9 @@ branch = [
     { name = "muon_vertex_gap_cut",       type = "both", parameters = [ "@muon_vertex_gap_thresh" ] },
     { name = "muon_reco_quality_cut",     type = "reco", parameters = [ "@mcs_csda_diff_thresh" ] },
     { name = "michel_attached_muon",      type = "reco", parameters = [ "@michel_min_depositions", "@michel_muon_ke_thresh", "@michel_dist_thresh" ] },
+
+    { name = "muon_energy_synth",   type = "true" },
+    { name = "muon_energy_synth_r", type = "true" },
 ] 
 
 
