@@ -159,6 +159,9 @@ branch = [
     { name = "leading_lepton_cos_theta",     type = "both" },
     { name = "hadronic_visible_energy_rest", type = "both" },
 
+    { name = "muon_energy_synth",   type = "true" },
+    { name = "muon_energy_synth_r", type = "true" },
+
     # Kinematic imbalance & angles
     { name = "opening_angle",             type = "both"},
     { name = "opening_angle_deg",         type = "both" },
@@ -421,6 +424,9 @@ branch = [
     { name = "hadronic_visible_energy",   type = "both"    },
     { name = "leptonic_visible_energy",   type = "both"    },
     { name = "visible_energy_calosub",    type = "both"    },
+
+    { name = "muon_energy_synth",   type = "true" },
+    { name = "muon_energy_synth_r", type = "true" },
 
     # Kinematic imbalance & angles
     { name = "opening_angle",             type = "both"},

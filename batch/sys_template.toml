@@ -1,8 +1,8 @@
 [input]
 path = 'output.root'
-#weights = '/pnfs/icarus/persistent/users/spine/NuMI/Nu_det_sys/CV/*flat_merged_geant4.root'
 #weights = 'data/*flat*.root'
-weights = '/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_2/combined_files/*.flat.root'
+#weights = '/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_2/combined_files/*.flat.root'
+weights = '/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.flat.root'
 
 use_additional_hash = true
 
@@ -11,8 +11,10 @@ path = 'output_sys.root'
 histogram_destination = 'variations/'
 
 [[sysvar]]
-name = 'reco_leading_muon_ke'
-bins = [15, 0, 3000]
+#name = 'reco_leading_muon_ke'
+#bins = [15, 0, 3000]
+name = 'reco_visible_energy'
+bins = [30, 0, 5]
 
 [[sys]]
 name = 'GENIEReWeight_SBN_v1_multisigma_ZExpA1CCQE'
@@ -692,68 +694,3 @@ index = 113
 name = 'NOvAStyleNonResPionNorm_SBN_v1_NR_nubar_p_NC_3Pi'
 type = 'multisim'
 index = 114
-
-[[sys]]
-name = 'expskin_Flux'
-type = 'multisim'
-index = 115
-
-[[sys]]
-name = 'horncurrent_Flux'
-type = 'multisim'
-index = 116
-
-[[sys]]
-name = 'kminus_Flux'
-type = 'multisim'
-index = 117
-
-[[sys]]
-name = 'kplus_Flux'
-type = 'multisim'
-index = 118
-
-[[sys]]
-name = 'kzero_Flux'
-type = 'multisim'
-index = 119
-
-[[sys]]
-name = 'nucleoninexsec_Flux'
-type = 'multisim'
-index = 120
-
-[[sys]]
-name = 'nucleonqexsec_Flux'
-type = 'multisim'
-index = 121
-
-[[sys]]
-name = 'nucleontotxsec_Flux'
-type = 'multisim'
-index = 122
-
-[[sys]]
-name = 'piminus_Flux'
-type = 'multisim'
-index = 123
-
-[[sys]]
-name = 'pioninexsec_Flux'
-type = 'multisim'
-index = 124
-
-[[sys]]
-name = 'pionqexsec_Flux'
-type = 'multisim'
-index = 125
-
-[[sys]]
-name = 'piontotxsec_Flux'
-type = 'multisim'
-index = 126
-
-[[sys]]
-name = 'piplus_Flux'
-type = 'multisim'
-index = 127

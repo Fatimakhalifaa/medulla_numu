@@ -44,3 +44,10 @@ target_include_directories(run_systematics PRIVATE include/ ${SBNANAOBJ_INC} ${R
 
 # Add ROOT definitions
 add_definitions(${ROOT_CXX_FLAGS})
+
+add_executable(to_gundam src/to_gundam.cc)
+target_link_libraries(to_gundam PRIVATE ${ROOT_LIBRARIES} sbnanaobj_standardrecord shared detsys trees)
+target_include_directories(to_gundam PRIVATE include/ ${SBNANAOBJ_INC} ${ROOT_INCLUDE_DIRS})
+
+#target_link_libraries(to_gundam PRIVATE ${ROOT_LIBRARIES} shared)
+#target_include_directories(to_gundam PRIVATE include/ ${ROOT_INCLUDE_DIRS})

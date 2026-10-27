@@ -49,7 +49,8 @@ fsthresh = [
 # ICARUS MC NuMI Neutrino + Cosmics CV
 [[sample]]
 name = "cvext"
-path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.root"
+path = "/pnfs/icarus/persistent/users/kyjung/nuSyst/nuSyst_ZEXPPCA/*.root"
+#path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/*.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_redo/larcv_mc_20250721_205436_642649-f1a10d3d-9a4a-4e94-b646-9753847a8d2b.flat.root"
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/combined_files/NuMI_CV_flat_cafs_2/*.root" # 500k sample 
 #path = "/pnfs/icarus/persistent/users/dcarber/spine/NuMI_CV_ext/v09_89_01_02p02_2/*.flat.root" # extended sample
@@ -84,7 +85,7 @@ disable = false # Optional: default = false
 name = "selected"
 sim_only = false
 #isdata = false
-add_systematics = true
+add_systematics = false
 add_exposure = true
 mode = "reco"
 cut = [
@@ -369,7 +370,7 @@ name = "signal"
 sim_only = true
 issignal = true
 #isdata = false
-add_systematics = false
+#add_systematics = false
 add_exposure = true
 mode = "true"
 cut = [

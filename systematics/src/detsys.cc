@@ -114,8 +114,17 @@ sys::detsys::DetsysCalculator::DetsysCalculator(cfg::ConfigurationTable & table,
         zscores.insert(std::make_pair(name, t.get_double_vector("nsigma")));
         TH1D * base = histograms[points[0]];
         int nbins = base->GetXaxis()->GetNbins();
-        const double * xedges = base->GetXaxis()->GetXbins()->GetArray();
-        hdummies.insert(std::make_pair(name, new TH1D("hdummy", "hdummy", nbins, xedges)));
+        // Build an explicit bin-edge array from the source axis. For
+        // fixed-width histograms GetXbins()->GetArray() returns a null/empty
+        // pointer, which makes the variable-bin TH1D/TH2D constructors fall
+        // back to a default [0,1] axis -- this silently caps the detector
+        // weights to the [0,1] range of the binning variable. Extracting the
+        // edges via GetBinLowEdge works for both fixed- and variable-width
+        // binning and preserves the true variable range.
+        std::vector<double> xedges(nbins + 1);
+        for(int b(0); b <= nbins; ++b)
+            xedges[b] = base->GetXaxis()->GetBinLowEdge(b + 1);
+        hdummies.insert(std::make_pair(name, new TH1D("hdummy", "hdummy", nbins, xedges.data())));
 
         // This block creates a TH2D that will be used to store the input for
         // the spline construction. The TH2D is filled with the ratio of the
@@ -124,7 +133,7 @@ sys::detsys::DetsysCalculator::DetsysCalculator(cfg::ConfigurationTable & table,
         // scale factor configured in the "detsys" block.
         double ylow = *std::min_element(zscores[name].begin(), zscores[name].end());
         double yup = *std::max_element(zscores[name].begin(), zscores[name].end());
-        TH2D * h = new TH2D("tmp", "tmp", nbins, xedges, points.size(), ylow, yup);
+        TH2D * h = new TH2D("tmp", "tmp", nbins, xedges.data(), points.size(), ylow, yup);
         for(size_t i(0); i < points.size(); ++i)
         {
             hdummies[name]->Divide(histograms[points[i]], histograms[t.get_string_field("ordinate")]);
